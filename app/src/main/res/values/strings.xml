@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">ClimeCast</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="home_text_view">Home</string>
+    <string name="alert_text_view">Alert</string>
+    <string name="settings_text_view">Settings</string>
+    <string name="favourite_text_view">Favourite</string>
 </resources>
