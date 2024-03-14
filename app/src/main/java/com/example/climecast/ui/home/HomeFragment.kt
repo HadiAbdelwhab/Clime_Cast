@@ -1,4 +1,4 @@
-package com.example.climecast.home
+package com.example.climecast.ui.home
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

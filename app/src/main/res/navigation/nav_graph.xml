@@ -3,26 +3,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/alertsFragment">
+    app:startDestination="@id/homeFragment">
 
     <fragment
         android:id="@+id/alertsFragment"
-        android:name="com.example.climecast.alerts.AlertsFragment"
+        android:name="com.example.climecast.ui.alerts.AlertsFragment"
         android:label="fragment_alerts"
         tools:layout="@layout/fragment_alerts" />
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.climecast.home.HomeFragment"
+        android:name="com.example.climecast.ui.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.example.climecast.settings.SettingsFragment"
+        android:name="com.example.climecast.ui.settings.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
     <fragment
         android:id="@+id/favouriteFragment"
-        android:name="com.example.climecast.favourite.FavouriteFragment"
+        android:name="com.example.climecast.ui.favourite.FavouriteFragment"
         android:label="fragment_favourite"
         tools:layout="@layout/fragment_favourite" />
 </navigation>

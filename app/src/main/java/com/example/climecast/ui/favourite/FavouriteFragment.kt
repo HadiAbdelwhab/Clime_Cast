@@ -1,4 +1,4 @@
-package com.example.climecast.favourite
+package com.example.climecast.ui.favourite
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

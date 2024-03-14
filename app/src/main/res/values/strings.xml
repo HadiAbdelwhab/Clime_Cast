@@ -6,4 +6,17 @@
     <string name="alert_text_view">Alert</string>
     <string name="settings_text_view">Settings</string>
     <string name="favourite_text_view">Favourite</string>
+    <string name="degree_text_view">Degree</string>
+    <string name="celsius_text">Celsius</string>
+    <string name="kelvin_text_view">Kelvin</string>
+    <string name="wind_text_view">Wind</string>
+    <string name="miles_hour_text">miles/hour</string>
+    <string name="meter_sec_text">meter/sec</string>
+    <string name="language_text_view">Language</string>
+    <string name="english_text">English</string>
+    <string name="arabic_text">Arabic</string>
+    <string name="dark_mode_text_view">Dark Mode\n</string>
+    <string name="location_text_view">Location\n</string>
+    <string name="gps_text">GPS</string>
+    <string name="map_text">Map</string>
 </resources>
