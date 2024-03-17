@@ -24,5 +24,14 @@
         android:id="@+id/favouriteFragment"
         android:name="com.example.climecast.ui.favourite.FavouriteFragment"
         android:label="fragment_favourite"
-        tools:layout="@layout/fragment_favourite" />
+        tools:layout="@layout/fragment_favourite">
+        <action
+            android:id="@+id/action_favouriteFragment_to_mapFragment"
+            app:destination="@id/mapFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.example.climecast.ui.MapFragment"
+        android:label="fragment_map"
+        tools:layout="@layout/fragment_map" />
 </navigation>

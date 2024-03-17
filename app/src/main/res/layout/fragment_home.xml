@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".ui.home.HomeFragment">
 
+    <TextView
+        android:id="@+id/current_city_text_view"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="match_parent"
+        android:textSize="25sp"
+        android:layout_marginTop="12dp"
+        android:textAlignment="center"
+        tools:text="City"
+        android:textStyle="bold"
+        android:layout_height="wrap_content"/>
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="200dp"
@@ -16,13 +26,14 @@
         app:cardElevation="25dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/current_city_text_view">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <ImageView
+                android:id="@+id/current_weather_image_view"
                 android:layout_width="0dp"
                 android:layout_height="180dp"
                 android:layout_marginStart="12dp"

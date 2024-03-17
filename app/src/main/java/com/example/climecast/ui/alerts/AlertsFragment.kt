@@ -6,22 +6,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.climecast.R
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+import com.example.climecast.databinding.FragmentAlertsBinding
+import com.example.climecast.databinding.FragmentHomeBinding
 
 
 class AlertsFragment : Fragment() {
+
+    private var _binding: FragmentAlertsBinding? = null
+    private val binding get() = _binding!!
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_alerts, container, false)
+    ): View {
+        _binding = FragmentAlertsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 

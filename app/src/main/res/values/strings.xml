@@ -19,4 +19,5 @@
     <string name="location_text_view">Location\n</string>
     <string name="gps_text">GPS</string>
     <string name="map_text">Map</string>
+    <string name="choose_a_loaction_button">Choose a loaction</string>
 </resources>
