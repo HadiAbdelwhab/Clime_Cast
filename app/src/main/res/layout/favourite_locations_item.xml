@@ -4,6 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginStart="12dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="12dp"
     app:cardCornerRadius="30dp"
     app:cardElevation="30dp">
 
@@ -12,21 +15,21 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/time_text_view"
+            android:id="@+id/location_name_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:textSize="15sp"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="21:22" />
+            tools:text="Cairo" />
 
-        <TextView
 
-            android:id="@+id/item_location_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

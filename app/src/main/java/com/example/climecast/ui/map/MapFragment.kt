@@ -3,6 +3,7 @@ import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.climecast.R
@@ -49,13 +50,17 @@ class MapFragment : Fragment() {
     private fun setListeners() {
         binding.chooseLocationButton.setOnClickListener {
 
-            val selectedLocation = selectedLocationMarker.position
-            val location = LatLong()
+            if (::selectedLocationMarker.isInitialized) {
+                val selectedLocation = selectedLocationMarker.position
+                val location = LatLong()
 
-            location.lat = selectedLocation.latitude
-            location.long = selectedLocation.longitude
-            val action = MapFragmentDirections.actionMapFragmentToFavouriteFragment(location)
-            findNavController().navigate(action)
+                location.lat = selectedLocation.latitude
+                location.long = selectedLocation.longitude
+                val action = MapFragmentDirections.actionMapFragmentToFavouriteFragment(location)
+                findNavController().navigate(action)
+            } else {
+                Toast.makeText(requireContext(), "Select a location first", Toast.LENGTH_SHORT).show()
+            }
         }
 
         binding.mapView.overlays.add(MapEventsOverlay(object : MapEventsReceiver {

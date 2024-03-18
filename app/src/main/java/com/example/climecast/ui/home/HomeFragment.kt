@@ -136,7 +136,7 @@ class HomeFragment : Fragment() {
         /*        Glide.with(requireActivity())
                     .load(data.list[0].weather[0].icon)
                     .into(binding.currentWeatherImageView)*/
-        Log.i(TAG, "updateUI: " + binding.currentWeatherImageView)
+        //Log.i(TAG, "updateUI: " + binding.currentWeatherImageView)
         //binding.currentCityTextView.text=data.currentWeather.
     }
 
