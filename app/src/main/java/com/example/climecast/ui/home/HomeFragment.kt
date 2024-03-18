@@ -21,8 +21,9 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.example.climecast.database.LocationsLocalDataSourceImpl
 import com.example.climecast.databinding.FragmentHomeBinding
-import com.example.climecast.model.WeatherData
+import com.example.climecast.model.WeatherResponse
 import com.example.climecast.model.WeatherRepositoryImpl
 import com.example.climecast.network.ApiState
 import com.example.climecast.network.WeatherRemoteDataSourceImpl
@@ -103,7 +104,8 @@ class HomeFragment : Fragment() {
 
         homeViewModelFactory = HomeViewModelFactory(
             WeatherRepositoryImpl.getInstance(
-                WeatherRemoteDataSourceImpl.getInstance()
+                WeatherRemoteDataSourceImpl.getInstance(),
+                LocationsLocalDataSourceImpl.getInstance(requireActivity())
             )
         )
 
@@ -128,14 +130,14 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun updateUI(data: WeatherData) {
-        binding.currentDataAndTimeTextView.text = data.list[0].dateTimeText
-        binding.currentTemperatureTextView.text = data.list[0].main.temperature.toString()
-        Glide.with(requireActivity())
-            .load(data.list[0].weather[0].icon)
-            .into(binding.currentWeatherImageView)
-        Log.i(TAG, "updateUI: "+ binding.currentWeatherImageView)
-        binding.currentCityTextView.text=data.city.name
+    private fun updateUI(data: WeatherResponse) {
+       // binding.currentDataAndTimeTextView.text = data.currentWeather.dateTime.toString()
+      //  binding.currentTemperatureTextView.text = data.currentWeather.temperature.toString()
+        /*        Glide.with(requireActivity())
+                    .load(data.list[0].weather[0].icon)
+                    .into(binding.currentWeatherImageView)*/
+        Log.i(TAG, "updateUI: " + binding.currentWeatherImageView)
+        //binding.currentCityTextView.text=data.currentWeather.
     }
 
     @SuppressLint("MissingPermission")

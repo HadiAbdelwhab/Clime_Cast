@@ -2,7 +2,7 @@ package com.example.climecast.ui.home.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.climecast.model.WeatherData
+import com.example.climecast.model.WeatherResponse
 import com.example.climecast.model.WeatherRepository
 import com.example.climecast.network.ApiState
 import kotlinx.coroutines.Dispatchers
@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel(private val _repo: WeatherRepository) : ViewModel() {
 
-    private var _weatherForecastStateFlow: MutableStateFlow<ApiState<WeatherData>> =
+    private var _weatherForecastStateFlow: MutableStateFlow<ApiState<WeatherResponse>> =
         MutableStateFlow(ApiState.Loading)
 
     val weatherForecastStateFlow = _weatherForecastStateFlow.asStateFlow()

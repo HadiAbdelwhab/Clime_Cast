@@ -1,6 +1,6 @@
 package com.example.climecast.network
 
-import com.example.climecast.model.WeatherData
+import com.example.climecast.model.WeatherResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.Response
@@ -30,7 +30,7 @@ class WeatherRemoteDataSourceImpl : WeatherRemoteDataSource {
     override suspend fun getWeatherForecast(
         lat: Double,
         lon: Double
-    ): Flow<Response<WeatherData>> {
+    ): Flow<Response<WeatherResponse>> {
         return flow { emit(weatherService.getWeatherForecast(lat, lon)) }
     }
 }
