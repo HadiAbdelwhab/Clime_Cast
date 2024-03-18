@@ -61,7 +61,7 @@ data class DailyData(
     @SerializedName("sunrise") val sunrise: Long,
     @SerializedName("sunset") val sunset: Long,
     @SerializedName("moonrise") val moonrise: Long,
-    @SerializedName("moonset") val moonset: Long,
+    @SerializedName("moonset") val moonSet: Long,
     @SerializedName("moon_phase") val moonPhase: Double,
     @SerializedName("summary") val summary: String,
     @SerializedName("temp") val temperature: TemperatureData,

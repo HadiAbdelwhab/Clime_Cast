@@ -20,4 +20,6 @@
     <string name="gps_text">GPS</string>
     <string name="map_text">Map</string>
     <string name="choose_a_loaction_button">Choose a loaction</string>
+    <string name="min_text_view">Min</string>
+    <string name="max_text_view">Max</string>
 </resources>

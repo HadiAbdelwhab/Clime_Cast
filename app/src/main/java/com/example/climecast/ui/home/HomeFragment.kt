@@ -20,13 +20,16 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.bumptech.glide.Glide
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.climecast.database.LocationsLocalDataSourceImpl
 import com.example.climecast.databinding.FragmentHomeBinding
+import com.example.climecast.model.DailyData
 import com.example.climecast.model.WeatherResponse
 import com.example.climecast.model.WeatherRepositoryImpl
 import com.example.climecast.network.ApiState
 import com.example.climecast.network.WeatherRemoteDataSourceImpl
+import com.example.climecast.ui.home.adapters.DaysWeatherDataAdapter
 import com.example.climecast.ui.home.viewmodel.HomeViewModel
 import com.example.climecast.ui.home.viewmodel.HomeViewModelFactory
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -48,7 +51,10 @@ class HomeFragment : Fragment() {
     private lateinit var viewModel: HomeViewModel
     private lateinit var homeViewModelFactory: HomeViewModelFactory
 
+
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+
+    private lateinit var daysWeatherDataAdapter: DaysWeatherDataAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -138,6 +144,21 @@ class HomeFragment : Fragment() {
                     .into(binding.currentWeatherImageView)*/
         //Log.i(TAG, "updateUI: " + binding.currentWeatherImageView)
         //binding.currentCityTextView.text=data.currentWeather.
+        setUpDaysAdapter(data.daily)
+
+    }
+
+    private fun setUpDaysAdapter(dailyDataList :List<DailyData>) {
+        daysWeatherDataAdapter= DaysWeatherDataAdapter(dailyDataList)
+
+        binding.dayRecyclerView.apply {
+            adapter=daysWeatherDataAdapter
+            layoutManager = LinearLayoutManager(requireActivity()).apply {
+                orientation = RecyclerView.VERTICAL
+            }
+        }
+
+
     }
 
     @SuppressLint("MissingPermission")
