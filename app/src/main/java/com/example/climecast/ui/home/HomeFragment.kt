@@ -5,6 +5,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
 import android.location.LocationManager
 import android.os.Bundle
 import android.os.Looper
@@ -25,11 +27,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.climecast.database.LocationsLocalDataSourceImpl
 import com.example.climecast.databinding.FragmentHomeBinding
 import com.example.climecast.model.DailyData
+import com.example.climecast.model.HourlyData
 import com.example.climecast.model.WeatherResponse
 import com.example.climecast.model.WeatherRepositoryImpl
 import com.example.climecast.network.ApiState
 import com.example.climecast.network.WeatherRemoteDataSourceImpl
 import com.example.climecast.ui.home.adapters.DaysWeatherDataAdapter
+import com.example.climecast.ui.home.adapters.HoursWeatherDataAdapter
 import com.example.climecast.ui.home.viewmodel.HomeViewModel
 import com.example.climecast.ui.home.viewmodel.HomeViewModelFactory
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -38,6 +42,9 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 private const val REQUEST_LOCATION_CODE = 505
 private const val TAG = "HomeFragment"
@@ -55,7 +62,9 @@ class HomeFragment : Fragment() {
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     private lateinit var daysWeatherDataAdapter: DaysWeatherDataAdapter
-
+    private lateinit var hoursWeatherDataAdapter: HoursWeatherDataAdapter
+    private  var latitude:Double = 0.0
+    private  var longitude:Double = 0.0
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -137,22 +146,28 @@ class HomeFragment : Fragment() {
     }
 
     private fun updateUI(data: WeatherResponse) {
-       // binding.currentDataAndTimeTextView.text = data.currentWeather.dateTime.toString()
-      //  binding.currentTemperatureTextView.text = data.currentWeather.temperature.toString()
-        /*        Glide.with(requireActivity())
-                    .load(data.list[0].weather[0].icon)
-                    .into(binding.currentWeatherImageView)*/
-        //Log.i(TAG, "updateUI: " + binding.currentWeatherImageView)
-        //binding.currentCityTextView.text=data.currentWeather.
-        setUpDaysAdapter(data.daily)
 
+        setUpDaysAdapter(data.daily)
+        setUpHoursAdapter(data.hourly)
+      binding.currentCityTextView.text=getCityFromLocation(latitude, longitude)
     }
 
-    private fun setUpDaysAdapter(dailyDataList :List<DailyData>) {
-        daysWeatherDataAdapter= DaysWeatherDataAdapter(dailyDataList)
+    private fun setUpHoursAdapter(hourlyDataList: List<HourlyData>) {
+        hoursWeatherDataAdapter = HoursWeatherDataAdapter(hourlyDataList, requireActivity())
+        binding.hoursRecyclerView.apply {
+            adapter = hoursWeatherDataAdapter
+            layoutManager = LinearLayoutManager(requireActivity()).apply {
+                orientation = RecyclerView.HORIZONTAL
+            }
+
+        }
+    }
+
+    private fun setUpDaysAdapter(dailyDataList: List<DailyData>) {
+        daysWeatherDataAdapter = DaysWeatherDataAdapter(dailyDataList, requireActivity())
 
         binding.dayRecyclerView.apply {
-            adapter=daysWeatherDataAdapter
+            adapter = daysWeatherDataAdapter
             layoutManager = LinearLayoutManager(requireActivity()).apply {
                 orientation = RecyclerView.VERTICAL
             }
@@ -177,9 +192,10 @@ class HomeFragment : Fragment() {
                     //longitudeTextView.text = location?.longitude?.toString() ?: "N/A"
                     //latitudeTextView.text = location?.latitude?.toString() ?: "N/A"
 
-                    val latitude = location?.latitude
-                    val longitude = location?.longitude
+                     latitude = location?.latitude!!
+                     longitude = location.longitude!!
                     viewModel.getWeatherForecast(latitude!!, longitude!!)
+
 
                 }
             }, Looper.myLooper()
@@ -211,5 +227,20 @@ class HomeFragment : Fragment() {
         ) == PackageManager.PERMISSION_GRANTED)
     }
 
+    private fun getCityFromLocation(latitude: Double, longitude: Double): String {
+        val geocoder = Geocoder(requireContext())
+        val addresses: List<Address>? = geocoder.getFromLocation(latitude, longitude, 1)
+        Log.i(TAG, "getAddressFromLocation: "+addresses.toString())
+        val cityName = addresses?.get(0)?.adminArea
+        val countryName = addresses?.get(0)?.countryName
+
+        return "${cityName?:""} $countryName"
+    }
+
+    fun convertUnixTimestampToFormattedDate(unixTimestamp: Long): String {
+       val dateFormat = SimpleDateFormat("EEE, dd MMMM, HH:mm", Locale.getDefault())
+       val date = Date(unixTimestamp * 1000)
+       return dateFormat.format(date)
+   }
 
 }

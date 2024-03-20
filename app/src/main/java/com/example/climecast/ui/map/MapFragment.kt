@@ -1,3 +1,5 @@
+import android.location.Address
+import android.location.Geocoder
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.LayoutInflater
@@ -5,10 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.climecast.R
+import com.example.climecast.database.Location
+import com.example.climecast.database.LocationsLocalDataSourceImpl
 import com.example.climecast.databinding.FragmentMapBinding
 import com.example.climecast.model.LatLong
+import com.example.climecast.model.WeatherRepositoryImpl
+import com.example.climecast.network.WeatherRemoteDataSourceImpl
+import com.example.climecast.ui.map.viewmodel.MapViewModel
+import com.example.climecast.ui.map.viewmodel.MapViewModelFactory
 import org.osmdroid.config.Configuration
 import org.osmdroid.api.IMapController
 import org.osmdroid.events.MapEventsReceiver
@@ -30,6 +39,9 @@ class MapFragment : Fragment() {
     private lateinit var locationOverlay: MyLocationNewOverlay
     private lateinit var selectedLocationMarker: Marker
 
+    private lateinit var viewModel: MapViewModel
+    private lateinit var factory: MapViewModelFactory
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,6 +52,16 @@ class MapFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+        factory = MapViewModelFactory(
+            WeatherRepositoryImpl.getInstance(
+                WeatherRemoteDataSourceImpl.getInstance(),
+                LocationsLocalDataSourceImpl.getInstance(requireActivity())
+            )
+        )
+
+        viewModel = ViewModelProvider(this, factory)[MapViewModel::class.java]
 
         initializeMapView()
         initializeLocationOverlay()
@@ -56,10 +78,19 @@ class MapFragment : Fragment() {
 
                 location.lat = selectedLocation.latitude
                 location.long = selectedLocation.longitude
+
+                val favouriteLocation = Location(
+                    getCityFromLocation(location.lat, location.long), location.lat, location.long
+                )
+
+
+                viewModel.addLocationToFavourite(favouriteLocation)
+
                 val action = MapFragmentDirections.actionMapFragmentToFavouriteFragment(location)
                 findNavController().navigate(action)
             } else {
-                Toast.makeText(requireContext(), "Select a location first", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Select a location first", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
@@ -125,8 +156,21 @@ class MapFragment : Fragment() {
         }
     }
 
+    private fun getCityFromLocation(latitude: Double, longitude: Double): String {
+        val geocoder = Geocoder(requireActivity())
+        val addresses: MutableList<Address>? = geocoder.getFromLocation(latitude, longitude, 1)
+        var cityText = "City not found"
+        if (!addresses.isNullOrEmpty()) {
+            val address = addresses[0]
+            cityText = address.locality ?: address.subAdminArea ?: address.adminArea ?: cityText
+        }
+        return cityText
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
+
 }
