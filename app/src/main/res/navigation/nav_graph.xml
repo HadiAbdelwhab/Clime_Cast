@@ -36,8 +36,8 @@
     <fragment
         android:id="@+id/mapFragment"
         android:name="MapFragment"
-        tools:layout="@layout/fragment_map"
-        android:label="MapFragment" >
+        android:label="MapFragment"
+        tools:layout="@layout/fragment_map">
         <action
             android:id="@+id/action_mapFragment_to_favouriteFragment"
             app:destination="@id/favouriteFragment" />

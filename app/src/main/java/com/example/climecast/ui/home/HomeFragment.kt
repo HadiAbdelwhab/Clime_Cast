@@ -22,8 +22,10 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.climecast.database.LocationsLocalDataSourceImpl
 import com.example.climecast.databinding.FragmentHomeBinding
 import com.example.climecast.model.DailyData
@@ -63,8 +65,8 @@ class HomeFragment : Fragment() {
 
     private lateinit var daysWeatherDataAdapter: DaysWeatherDataAdapter
     private lateinit var hoursWeatherDataAdapter: HoursWeatherDataAdapter
-    private  var latitude:Double = 0.0
-    private  var longitude:Double = 0.0
+    private var latitude: Double = 0.0
+    private var longitude: Double = 0.0
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -147,9 +149,19 @@ class HomeFragment : Fragment() {
 
     private fun updateUI(data: WeatherResponse) {
 
+
+        //loadSettings(data.hourly, data.daily)
         setUpDaysAdapter(data.daily)
         setUpHoursAdapter(data.hourly)
-      binding.currentCityTextView.text=getCityFromLocation(latitude, longitude)
+        binding.currentTemperatureTextView.text = data.current.temperature.toString()
+
+        Glide.with(requireActivity())
+            .load("https://openweathermap.org/img/wn/" + data.current.weather[0].icon + "@2x.png")
+            .into(binding.currentWeatherImageView)
+        binding.humidityTextView.text = data.current.humidity.toString()
+        binding.windTextView.text = data.current.windSpeed.toString()
+        binding.cloudsTextView.text = data.current.clouds.toString()
+        binding.currentCityTextView.text = getCityFromLocation(latitude, longitude)
     }
 
     private fun setUpHoursAdapter(hourlyDataList: List<HourlyData>) {
@@ -192,8 +204,8 @@ class HomeFragment : Fragment() {
                     //longitudeTextView.text = location?.longitude?.toString() ?: "N/A"
                     //latitudeTextView.text = location?.latitude?.toString() ?: "N/A"
 
-                     latitude = location?.latitude!!
-                     longitude = location.longitude!!
+                    latitude = location?.latitude!!
+                    longitude = location.longitude!!
                     viewModel.getWeatherForecast(latitude!!, longitude!!)
 
 
@@ -230,17 +242,34 @@ class HomeFragment : Fragment() {
     private fun getCityFromLocation(latitude: Double, longitude: Double): String {
         val geocoder = Geocoder(requireContext())
         val addresses: List<Address>? = geocoder.getFromLocation(latitude, longitude, 1)
-        Log.i(TAG, "getAddressFromLocation: "+addresses.toString())
+        Log.i(TAG, "getAddressFromLocation: " + addresses.toString())
         val cityName = addresses?.get(0)?.adminArea
         val countryName = addresses?.get(0)?.countryName
 
-        return "${cityName?:""} $countryName"
+        return "${cityName ?: ""} $countryName"
     }
 
     fun convertUnixTimestampToFormattedDate(unixTimestamp: Long): String {
-       val dateFormat = SimpleDateFormat("EEE, dd MMMM, HH:mm", Locale.getDefault())
-       val date = Date(unixTimestamp * 1000)
-       return dateFormat.format(date)
-   }
+        val dateFormat = SimpleDateFormat("EEE, dd MMMM, HH:mm", Locale.getDefault())
+        val date = Date(unixTimestamp * 1000)
+        return dateFormat.format(date)
+    }
+
+
+
+   /* private fun loadSettings(hourlyDataList: List<HourlyData>, dailyDataList: List<DailyData>) {
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireActivity())
+
+        val temperatureUnit = sharedPreferences.getString("temp_unit", "Kelvin")
+        if (temperatureUnit == "celsius") {
+           )
+        } else if (temperatureUnit == "Fahrenheit") {
+            setUpDaysAdapter(dailyDataList)
+            setUpHoursAdapter(hourlyDataList)
+        }
+
+
+    }*/
+
 
 }

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.climecast.R
 import com.example.climecast.model.DailyData
+import com.example.climecast.util.SharedPreferencesManger
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -46,10 +47,22 @@ class DaysWeatherDataAdapter(
         } else {
             formatDate(dailyItem.timestamp)
         }
+
+        val unit = SharedPreferencesManger.getSharedPreferencesManagerTempUnit(context)
+        if (unit == "celsius") {
+
+            holder.dayMaxDegree.text = kelvinToCelsius(dailyItem.temperature.max)
+            holder.dayMinDegree.text = kelvinToCelsius(dailyItem.temperature.min)
+
+        } else if (unit == "Fahrenheit") {
+            holder.dayMaxDegree.text = kelvinToFahrenheit(dailyItem.temperature.max)
+            holder.dayMinDegree.text = kelvinToFahrenheit(dailyItem.temperature.min)
+        } else {
+            holder.dayMaxDegree.text = dailyItem.temperature.max.toString()
+            holder.dayMinDegree.text = dailyItem.temperature.min.toString()
+        }
         holder.dayTextView.text = formattedDate
         holder.descriptionTextView.text = dailyItem.weather[0].description
-        holder.dayMaxDegree.text = dailyItem.temperature.max.toString()
-        holder.dayMinDegree.text = dailyItem.temperature.min.toString()
         Glide.with(context)
             .load("https://openweathermap.org/img/wn/" + dailyItem.weather[0].icon + "@2x.png")
             .into(holder.weatherIcon)
@@ -62,4 +75,19 @@ class DaysWeatherDataAdapter(
         val dateFormat = SimpleDateFormat("EEEE", Locale.getDefault())
         return dateFormat.format(calendar.time)
     }
+
+    private fun kelvinToCelsius(kelvin: Double): String {
+        val result = kelvin - 273.15
+        val roundedResult = String.format("%.2f", result)
+        return roundedResult.substring(0, minOf(roundedResult.length, 2))
+    }
+
+    private fun kelvinToFahrenheit(kelvin: Double): String {
+        val celsius = kelvin - 273.15
+        val result = (celsius * 9 / 5) + 32
+        val roundedResult = String.format("%.2f", result)
+        return roundedResult.substring(0, minOf(roundedResult.length, 2))
+    }
+
+
 }

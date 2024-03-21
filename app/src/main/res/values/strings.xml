@@ -22,4 +22,22 @@
     <string name="choose_a_loaction_button">Choose a loaction</string>
     <string name="min_text_view">Min</string>
     <string name="max_text_view">Max</string>
+    <!-- Preference Titles -->
+    <string name="app_header">App</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="language_title">Choose language</string>
+    <string name="units_title">Choose unit</string>
+    <!-- Sync Preferences -->
+    <string name="dark_mode_title">Dark mode</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="weather_header">Weather</string>
+    <string name="wind_title">Wind unit</string>
+    <string name="temp_unit_title">Temperature unit</string>
+    <string name="location_title">Location</string>
+    <string name="notification_title">Notifications</string>
 </resources>

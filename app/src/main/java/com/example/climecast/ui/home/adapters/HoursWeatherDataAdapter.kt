@@ -6,10 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.climecast.R
 import com.example.climecast.model.HourlyData
+import com.example.climecast.util.SharedPreferencesManger
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -35,7 +37,18 @@ class HoursWeatherDataAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val hourlyData = hourlyWeatherData[position]
-        holder.degreeTextView.text = hourlyData.temperature.toString()
+
+        val unit = SharedPreferencesManger.getSharedPreferencesManagerTempUnit(context)
+        if (unit == "celsius") {
+
+            holder.degreeTextView.text = kelvinToCelsius(hourlyData.temperature)
+
+        } else if (unit == "Fahrenheit") {
+            holder.degreeTextView.text = kelvinToFahrenheit(hourlyData.temperature)
+        } else {
+            holder.degreeTextView.text = hourlyData.temperature.toString()
+        }
+
         holder.timeTextView.text = formatTime(hourlyData.timestamp)
         Glide.with(context)
             .load("https://openweathermap.org/img/wn/" + hourlyData.weather[0].icon + "@2x.png")
@@ -48,5 +61,18 @@ class HoursWeatherDataAdapter(
         }
         val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
         return dateFormat.format(calendar.time)
+    }
+
+    private fun kelvinToCelsius(kelvin: Double): String {
+        val result = kelvin - 273.15
+        val roundedResult = String.format("%.2f", result)
+        return roundedResult.substring(0, minOf(roundedResult.length, 2))
+    }
+
+    private fun kelvinToFahrenheit(kelvin: Double): String {
+        val celsius = kelvin - 273.15
+        val result = (celsius * 9 / 5) + 32
+        val roundedResult = String.format("%.2f", result)
+        return roundedResult.substring(0, minOf(roundedResult.length, 2))
     }
 }
