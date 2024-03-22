@@ -12,6 +12,8 @@ import com.bumptech.glide.Glide
 import com.example.climecast.R
 import com.example.climecast.model.DailyData
 import com.example.climecast.util.SharedPreferencesManger
+import com.example.climecast.util.WeatherUtils.Companion.kelvinToCelsius
+import com.example.climecast.util.WeatherUtils.Companion.kelvinToFahrenheit
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -70,24 +72,13 @@ class DaysWeatherDataAdapter(
 
     private fun formatDate(timestamp: Long): String {
         val calendar = Calendar.getInstance().apply {
-            timeInMillis = timestamp * 1000 // Convert seconds to milliseconds
+            timeInMillis = timestamp * 1000
         }
         val dateFormat = SimpleDateFormat("EEEE", Locale.getDefault())
         return dateFormat.format(calendar.time)
     }
 
-    private fun kelvinToCelsius(kelvin: Double): String {
-        val result = kelvin - 273.15
-        val roundedResult = String.format("%.2f", result)
-        return roundedResult.substring(0, minOf(roundedResult.length, 2))
-    }
 
-    private fun kelvinToFahrenheit(kelvin: Double): String {
-        val celsius = kelvin - 273.15
-        val result = (celsius * 9 / 5) + 32
-        val roundedResult = String.format("%.2f", result)
-        return roundedResult.substring(0, minOf(roundedResult.length, 2))
-    }
 
 
 }
