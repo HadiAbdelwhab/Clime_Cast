@@ -25,14 +25,12 @@
         android:name="com.example.climecast.ui.favourite.FavouriteFragment"
         android:label="fragment_favourite"
         tools:layout="@layout/fragment_favourite">
-        <argument
-            android:name="location"
-            app:argType="com.example.climecast.model.LatLong" />
         <action
             android:id="@+id/action_favouriteFragment_to_mapFragment"
             app:destination="@id/mapFragment" />
-
     </fragment>
+
+
     <fragment
         android:id="@+id/mapFragment"
         android:name="MapFragment"

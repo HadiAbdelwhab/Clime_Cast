@@ -86,7 +86,7 @@ class MapFragment : Fragment() {
 
                 viewModel.addLocationToFavourite(favouriteLocation)
 
-                val action = MapFragmentDirections.actionMapFragmentToFavouriteFragment(location)
+                val action = MapFragmentDirections.actionMapFragmentToFavouriteFragment()
                 findNavController().navigate(action)
             } else {
                 Toast.makeText(requireContext(), "Select a location first", Toast.LENGTH_SHORT)

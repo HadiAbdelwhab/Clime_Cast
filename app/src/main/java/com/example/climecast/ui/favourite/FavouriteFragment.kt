@@ -27,7 +27,6 @@ class FavouriteFragment : Fragment() {
     private var _binding: FragmentFavouriteBinding? = null
     private val binding get() = _binding!!
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -44,20 +43,23 @@ class FavouriteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setUpViewModel()
+        setListeners()
+        setObserver()
+        viewModel.addLocationToFavourite(Location("cairo",0.2,1.0))
+    }
+
+    private fun setUpViewModel(){
         favouriteViewModelFactory = FavouriteViewModelFactory(
             WeatherRepositoryImpl.getInstance(
                 WeatherRemoteDataSourceImpl.getInstance(),
                 LocationsLocalDataSourceImpl.getInstance(requireActivity())
             )
         )
+        viewModel = ViewModelProvider(this, favouriteViewModelFactory)[FavouriteViewModel::class.java]
+    }
 
-
-        setListeners()
-
-        viewModel =
-            ViewModelProvider(this, favouriteViewModelFactory)[FavouriteViewModel::class.java]
-        viewModel.addLocationToFavourite(Location("cairo",0.2,1.0))
-
+    private fun setObserver(){
         lifecycleScope.launch {
             viewModel.favouriteLocationsStateFlow.collect { list ->
                 setAdapter(list)
@@ -67,15 +69,12 @@ class FavouriteFragment : Fragment() {
 
     private fun setListeners() {
         binding.addNewLoactionButton.setOnClickListener {
-
             val action = FavouriteFragmentDirections.actionFavouriteFragmentToMapFragment()
             findNavController().navigate(action)
-
         }
     }
 
     private fun setAdapter(list: List<Location>) {
-
         favouriteLocationAdapter = FavouriteLocationsAdapter(list)
         binding.favouriteLocationsRecyclerView.apply {
             adapter = favouriteLocationAdapter
@@ -85,5 +84,4 @@ class FavouriteFragment : Fragment() {
         }
         favouriteLocationAdapter.notifyDataSetChanged()
     }
-
 }
