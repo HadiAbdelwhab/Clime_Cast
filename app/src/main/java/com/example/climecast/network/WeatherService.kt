@@ -9,7 +9,8 @@ interface WeatherService {
     @GET("onecall")
     suspend fun getWeatherForecast(
         @Query("lat") latitude: Double,
-        @Query("lon") longitude: Double
+        @Query("lon") longitude: Double,
+        @Query("lang") language:String
     ): Response<WeatherResponse>
 }
 

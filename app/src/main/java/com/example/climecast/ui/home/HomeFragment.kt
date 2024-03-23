@@ -168,9 +168,11 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupLocation() {
+        val language=SharedPreferencesManger.getSharedPreferencesManagerLanguage(requireActivity())
+
         if (checkPermissions()) {
             if (isLocationEnabled()) {
-                requestLocationUpdates()
+                requestLocationUpdates(language)
             } else {
                 enableLocationServices()
             }
@@ -179,7 +181,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun requestLocationUpdates() {
+    private fun requestLocationUpdates(language:String) {
         fusedLocationProviderClient = getFusedLocationProviderClient(requireActivity())
         if (ActivityCompat.checkSelfPermission(
                 requireActivity(),
@@ -208,7 +210,7 @@ class HomeFragment : Fragment() {
                     val location = p0.lastLocation
                     latitude = location!!.latitude
                     longitude = location!!.longitude
-                    viewModel.getWeatherForecast(latitude, longitude)
+                    viewModel.getWeatherForecast(latitude, longitude,language)
                     fusedLocationProviderClient.removeLocationUpdates(this)
                 }
             },

@@ -19,9 +19,9 @@ class HomeViewModel(private val _repo: WeatherRepository) : ViewModel() {
     val weatherForecastStateFlow = _weatherForecastStateFlow.asStateFlow()
 
 
-    fun getWeatherForecast(lat: Double, lon: Double) {
+    fun getWeatherForecast(lat: Double, lon: Double,language:String) {
         viewModelScope.launch(Dispatchers.IO) {
-            _repo.getWeatherForecast(lat, lon)
+            _repo.getWeatherForecast(lat, lon,language)
                 .catch { error ->
 
                     _weatherForecastStateFlow.value = ApiState.Error(error)

@@ -7,5 +7,7 @@ import retrofit2.Response
 
 interface WeatherRemoteDataSource {
 
-    suspend fun getWeatherForecast(lat: Double, lon: Double): Flow<Response<WeatherResponse>>
+    suspend fun getWeatherForecast(
+        lat: Double, lon: Double, language: String
+    ): Flow<Response<WeatherResponse>>
 }

@@ -32,9 +32,10 @@ class WeatherRepositoryImpl private constructor(
 
     override suspend fun getWeatherForecast(
         lat: Double,
-        lon: Double
+        lon: Double,
+        language: String
     ): Flow<Response<WeatherResponse>> {
-        return remoteDataSource.getWeatherForecast(lat, lon)
+        return remoteDataSource.getWeatherForecast(lat, lon, language)
     }
 
     override fun getFavouriteLocations(): Flow<List<Location>> {

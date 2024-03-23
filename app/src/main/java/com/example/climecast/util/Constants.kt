@@ -5,4 +5,5 @@ object Constants {
      const val BASE_URL="https://api.openweathermap.org/data/3.0/"
      const val TEMP_UNIT_PREFERENCES="temp_unit"
      const val WIND_UNIT_PREFERENCES="wind_unit"
+     const val LANGUAGE_PREFERENCES="language"
 }
