@@ -62,14 +62,15 @@ class FavouriteFragment : Fragment() {
     private fun setObserver(){
         lifecycleScope.launch {
             viewModel.favouriteLocationsStateFlow.collect { list ->
-                setAdapter(list)
+                _binding?.let {
+                    setAdapter(list)
+                }
             }
         }
     }
-
     private fun setListeners() {
         binding.addNewLoactionButton.setOnClickListener {
-            val action = FavouriteFragmentDirections.actionFavouriteFragmentToMapFragment()
+            val action = FavouriteFragmentDirections.actionFavouriteFragmentToMapsFragment()
             findNavController().navigate(action)
         }
     }
@@ -84,4 +85,5 @@ class FavouriteFragment : Fragment() {
         }
         favouriteLocationAdapter.notifyDataSetChanged()
     }
+
 }

@@ -1,8 +1,9 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    id 'androidx.navigation.safeargs'
+    id 'androidx.navigation.safeargs.kotlin'
     id 'kotlin-kapt'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 
 }
 
@@ -86,6 +87,10 @@ dependencies {
 
     //for Kotlin + workManager
     implementation "androidx.work:work-runtime-ktx:2.7.1"
+
+    //google_map_service
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+
 
 
 }

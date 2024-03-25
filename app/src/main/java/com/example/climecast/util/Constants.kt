@@ -8,5 +8,6 @@ object Constants {
      const val LANGUAGE_PREFERENCES="language"
      const val CHANNEL_ID = "CHANNEL_ID"
      const val NOTIFICATION_PREM = 101
+     const val MAP_API_KEY="AIzaSyCAAF_jxsAmyx5ykc-7pqcvZGmMY9RtVQo"
 
 }

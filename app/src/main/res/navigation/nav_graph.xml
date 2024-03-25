@@ -26,8 +26,8 @@
         android:label="fragment_favourite"
         tools:layout="@layout/fragment_favourite">
         <action
-            android:id="@+id/action_favouriteFragment_to_mapFragment"
-            app:destination="@id/mapFragment" />
+            android:id="@+id/action_favouriteFragment_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
     </fragment>
 
 
@@ -35,10 +35,16 @@
         android:id="@+id/mapFragment"
         android:name="MapFragment"
         android:label="MapFragment"
-        tools:layout="@layout/fragment_map">
+        tools:layout="@layout/fragment_map" />
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="com.example.climecast.ui.map.MapsFragment"
+        android:label="fragment_maps"
+        tools:layout="@layout/fragment_maps">
         <action
-            android:id="@+id/action_mapFragment_to_favouriteFragment"
+            android:id="@+id/action_mapsFragment_to_favouriteFragment"
             app:destination="@id/favouriteFragment" />
     </fragment>
+
 
 </navigation>
