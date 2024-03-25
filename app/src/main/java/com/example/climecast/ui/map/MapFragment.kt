@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.climecast.R
 import com.example.climecast.database.Location
-import com.example.climecast.database.LocationsLocalDataSourceImpl
+import com.example.climecast.database.WeatherLocalDataSourceImpl
 import com.example.climecast.databinding.FragmentMapBinding
 import com.example.climecast.model.LatLong
 import com.example.climecast.model.WeatherRepositoryImpl
@@ -26,7 +26,6 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import org.osmdroid.views.overlay.Marker
-import org.osmdroid.views.overlay.infowindow.MarkerInfoWindow
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.views.overlay.MapEventsOverlay
 
@@ -57,7 +56,7 @@ class MapFragment : Fragment() {
         factory = MapViewModelFactory(
             WeatherRepositoryImpl.getInstance(
                 WeatherRemoteDataSourceImpl.getInstance(),
-                LocationsLocalDataSourceImpl.getInstance(requireActivity())
+                WeatherLocalDataSourceImpl.getInstance(requireActivity())
             )
         )
 

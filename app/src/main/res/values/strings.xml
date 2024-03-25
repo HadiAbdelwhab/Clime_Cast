@@ -42,4 +42,7 @@
     <string name="notification_title">Notifications</string>
     <string name="start_time">Start time</string>
     <string name="end_time">End time</string>
+    <string name="alert_time">Alert time\n</string>
+    <string name="channel_description">alert channel</string>
+    <string name="channel_name">channel_alert</string>
 </resources>

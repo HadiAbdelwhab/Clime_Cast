@@ -6,4 +6,7 @@ object Constants {
      const val TEMP_UNIT_PREFERENCES="temp_unit"
      const val WIND_UNIT_PREFERENCES="wind_unit"
      const val LANGUAGE_PREFERENCES="language"
+     const val CHANNEL_ID = "CHANNEL_ID"
+     const val NOTIFICATION_PREM = 101
+
 }

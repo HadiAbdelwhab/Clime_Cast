@@ -13,9 +13,7 @@ class AlertsAdapter(
 ) : RecyclerView.Adapter<AlertsAdapter.ViewHolder>() {
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val startTimeTextView: TextView = itemView.findViewById(R.id.start_time_text_view)
-        val endTimeTextView: TextView = itemView.findViewById(R.id.end_time_text_view)
-        val startDateTextView: TextView = itemView.findViewById(R.id.start_date_text_view)
-        val endDateTextView: TextView = itemView.findViewById(R.id.end_date_text_view)
+        val startDateTextView: TextView = itemView.findViewById(R.id.alert_date_text_view)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -29,9 +27,7 @@ class AlertsAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.startTimeTextView.text = alerts[position].startTime.time.toString()
-        holder.endTimeTextView.text = alerts[position].endTime.time.toString()
-        holder.startDateTextView.text = alerts[position].startDate.time.toString()
-        holder.endDateTextView.text = alerts[position].endDate.time.toString()
+        holder.startTimeTextView.text = alerts[position].alertTime.toString()
+        //holder.startDateTextView.text = alerts[position].alertDate.time.toString()
     }
 }

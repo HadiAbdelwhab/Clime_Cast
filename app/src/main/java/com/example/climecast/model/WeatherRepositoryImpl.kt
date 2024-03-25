@@ -1,14 +1,15 @@
 package com.example.climecast.model
 
 import com.example.climecast.database.Location
-import com.example.climecast.database.LocationsLocalDataSource
+import com.example.climecast.database.WeatherData
+import com.example.climecast.database.WeatherLocalDataSource
 import com.example.climecast.network.WeatherRemoteDataSource
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 
 class WeatherRepositoryImpl private constructor(
     private val remoteDataSource: WeatherRemoteDataSource,
-    private val locationLocalDataSource: LocationsLocalDataSource
+    private val weatherLocalDataSource: WeatherLocalDataSource
 ) : WeatherRepository {
 
 
@@ -19,7 +20,7 @@ class WeatherRepositoryImpl private constructor(
             remoteDataSource:
             WeatherRemoteDataSource,
             locationLocalDataSource:
-            LocationsLocalDataSource
+            WeatherLocalDataSource
         ): WeatherRepositoryImpl {
             return instance ?: synchronized(this) {
                 instance ?: WeatherRepositoryImpl(
@@ -39,14 +40,26 @@ class WeatherRepositoryImpl private constructor(
     }
 
     override fun getFavouriteLocations(): Flow<List<Location>> {
-        return locationLocalDataSource.getFavouriteLocation()
+        return weatherLocalDataSource.getFavouriteLocation()
     }
 
     override suspend fun addLocation(location: Location) {
-        locationLocalDataSource.addLocation(location)
+        weatherLocalDataSource.addLocation(location)
     }
 
     override suspend fun deleteLocation(location: Location) {
-        locationLocalDataSource.deleteLocation(location)
+        weatherLocalDataSource.deleteLocation(location)
+    }
+
+    override suspend fun insertWeatherDate(weatherData: WeatherData) {
+        weatherLocalDataSource.insertWeatherData(weatherData)
+    }
+
+    override suspend fun deleteWeatherData() {
+        weatherLocalDataSource.deleteWeatherDate()
+    }
+
+    override fun getWeatherData(): Flow<WeatherData> {
+        return weatherLocalDataSource.getWeatherData()
     }
 }

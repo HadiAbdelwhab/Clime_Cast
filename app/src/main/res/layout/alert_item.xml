@@ -15,13 +15,13 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/start_time"
+            android:id="@+id/alert_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="12dp"
-            android:layout_marginBottom="16dp"
-            android:text="@string/start_time"
+            android:layout_marginBottom="12dp"
+            android:text="@string/alert_time"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -36,56 +36,26 @@
             android:layout_marginTop="12dp"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/start_time"
+            app:layout_constraintStart_toEndOf="@+id/alert_time"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="21:00" />
 
         <TextView
-            android:id="@+id/start_date_text_view"
+            android:id="@+id/alert_date_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/start_time_text_view"
-            tools:text="3 Feb"
-            app:layout_constraintStart_toStartOf="@+id/start_time_text_view"
-            app:layout_constraintTop_toBottomOf="@+id/start_time_text_view" />
-
-        <TextView
-
-            android:id="@+id/end_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:layout_marginTop="12dp"
-            android:layout_marginBottom="16dp"
-            android:text="@string/end_time"
-            android:textSize="20sp"
-            app:layout_goneMarginBottom="5dp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/start_time_text_view"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/end_time_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="12dp"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/end_time"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="22:00" />
+            tools:text="3 Feb" />
 
-        <TextView
-            android:id="@+id/end_date_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@drawable/ic_delete"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/end_time_text_view"
-            app:layout_constraintStart_toStartOf="@+id/end_time_text_view"
-            app:layout_constraintEnd_toEndOf="@id/end_time_text_view"
-            tools:text="5 Feb"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

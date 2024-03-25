@@ -6,20 +6,21 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 
-@Database(entities = [Location::class], version = 1)
+@Database(entities = [Location::class, WeatherData::class], version = 1)
 
-abstract class FavouriteLocationsDatabase : RoomDatabase() {
+abstract class WeatherDatabase : RoomDatabase() {
 
     abstract fun locationDao(): FavouriteLocationsDao
+    abstract fun weatherDateDao(): WeatherDataDao
 
     companion object {
         @Volatile
-        private var INSTANCE: FavouriteLocationsDatabase? = null
-        fun getInstance(context: Context): FavouriteLocationsDatabase {
+        private var INSTANCE: WeatherDatabase? = null
+        fun getInstance(context: Context): WeatherDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
-                    FavouriteLocationsDatabase::class.java,
+                    WeatherDatabase::class.java,
                     "locations_database"
                 )
                     .build()

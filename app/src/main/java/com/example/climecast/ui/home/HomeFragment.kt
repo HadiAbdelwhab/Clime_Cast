@@ -1,13 +1,15 @@
 package com.example.climecast.ui.home
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
 import android.location.LocationManager
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import android.os.Looper
 import android.provider.Settings
@@ -25,7 +27,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.climecast.database.LocationsLocalDataSourceImpl
+import com.example.climecast.database.WeatherData
+import com.example.climecast.database.WeatherLocalDataSourceImpl
 import com.example.climecast.databinding.FragmentHomeBinding
 import com.example.climecast.model.DailyData
 import com.example.climecast.model.HourlyData
@@ -39,24 +42,21 @@ import com.example.climecast.ui.home.viewmodel.HomeViewModel
 import com.example.climecast.ui.home.viewmodel.HomeViewModelFactory
 import com.example.climecast.util.SharedPreferencesManger
 import com.example.climecast.util.WeatherUtils
-import com.example.climecast.util.WeatherUtils.Companion.kelvinToCelsius
-import com.example.climecast.util.WeatherUtils.Companion.kelvinToFahrenheit
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices.getFusedLocationProviderClient
+import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+private const val REQUEST_LOCATION_CODE = 505
+private const val TAG = "HomeFragment"
 
 class HomeFragment : Fragment() {
 
-    companion object {
-        private const val REQUEST_LOCATION_CODE = 505
-        private const val TAG = "HomeFragment"
-    }
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -88,16 +88,51 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+
         setupViewModel()
-        setupObservers()
-        setupLocation()
+
+        if (isInternetAvailable(requireActivity())) {
+            setupLocation()
+            setupObservers()
+
+        } else {
+            setupLocalObservers()
+
+        }
+
+
+    }
+
+    private fun setupLocalObservers() {
+        lifecycleScope.launch {
+            viewModel.localWeatherStateFlow.collect { result ->
+
+                when (result) {
+                    is ApiState.Error -> Log.i(TAG, "setupLocalObserversE: ")
+                    ApiState.Loading -> Log.i(TAG, "setupLocalObserversL: ")
+                    is ApiState.Success -> {
+                        Log.i(TAG, "setupLocalObservers1: " + result.data)
+                        //val gson = Gson().toJson(result.data.toString())
+
+                        val weatherData: WeatherResponse =
+                            Gson().fromJson(result.data.dataGson, WeatherResponse::class.java)
+
+                        Log.i(TAG, "setupLocalObservers2: " + weatherData)
+                        updateUI(weatherData)
+
+
+                    }
+                }
+            }
+        }
     }
 
     private fun setupViewModel() {
         homeViewModelFactory = HomeViewModelFactory(
             WeatherRepositoryImpl.getInstance(
                 WeatherRemoteDataSourceImpl.getInstance(),
-                LocationsLocalDataSourceImpl.getInstance(requireActivity())
+                WeatherLocalDataSourceImpl.getInstance(requireActivity())
             )
         )
         viewModel = ViewModelProvider(this, homeViewModelFactory)[HomeViewModel::class.java]
@@ -109,6 +144,14 @@ class HomeFragment : Fragment() {
                 when (result) {
                     is ApiState.Success -> {
                         updateUI(result.data)
+
+                        val gson = Gson()
+                        val weatherData = WeatherData(gson.toJson(result.data))
+
+                        viewModel.deleteWeatherData()
+                        viewModel.addWeatherData(weatherData)
+
+                        //Log.i(TAG, "setupObservers: " + json)
                         binding.homeProgressBar.visibility = View.GONE
                     }
 
@@ -124,12 +167,15 @@ class HomeFragment : Fragment() {
             }
         }
     }
+
     private fun updateUI(data: WeatherResponse) {
         setUpDaysAdapter(data.daily)
         setUpHoursAdapter(data.hourly)
 
-        val tempUnit = SharedPreferencesManger.getSharedPreferencesManagerTempUnit(requireActivity())
-        val windUnit = SharedPreferencesManger.getSharedPreferencesManagerWindUnit(requireActivity())
+        val tempUnit =
+            SharedPreferencesManger.getSharedPreferencesManagerTempUnit(requireActivity())
+        val windUnit =
+            SharedPreferencesManger.getSharedPreferencesManagerWindUnit(requireActivity())
 
         binding.currentTemperatureTextView.text = when (tempUnit) {
             "celsius" -> WeatherUtils.kelvinToCelsius(data.current.temperature)
@@ -148,7 +194,9 @@ class HomeFragment : Fragment() {
 
         binding.humidityTextView.text = data.current.humidity.toString()
         binding.cloudsTextView.text = data.current.clouds.toString()
-        binding.currentCityTextView.text = getCityFromLocation(latitude, longitude)
+        if (isInternetAvailable(requireActivity())) {
+            binding.currentCityTextView.text = getCityFromLocation(latitude, longitude)
+        }
     }
 
     private fun setUpHoursAdapter(hourlyDataList: List<HourlyData>) {
@@ -168,7 +216,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupLocation() {
-        val language=SharedPreferencesManger.getSharedPreferencesManagerLanguage(requireActivity())
+        val language =
+            SharedPreferencesManger.getSharedPreferencesManagerLanguage(requireActivity())
 
         if (checkPermissions()) {
             if (isLocationEnabled()) {
@@ -181,7 +230,8 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun requestLocationUpdates(language:String) {
+
+    private fun requestLocationUpdates(language: String) {
         fusedLocationProviderClient = getFusedLocationProviderClient(requireActivity())
         if (ActivityCompat.checkSelfPermission(
                 requireActivity(),
@@ -210,7 +260,7 @@ class HomeFragment : Fragment() {
                     val location = p0.lastLocation
                     latitude = location!!.latitude
                     longitude = location!!.longitude
-                    viewModel.getWeatherForecast(latitude, longitude,language)
+                    viewModel.getWeatherForecast(latitude, longitude, language)
                     fusedLocationProviderClient.removeLocationUpdates(this)
                 }
             },
@@ -261,12 +311,25 @@ class HomeFragment : Fragment() {
         return "$cityName $countryName"
     }
 
+    fun isInternetAvailable(context: Context): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val capabilities =
+                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            return capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true
+        } else {
+            val networkInfo = connectivityManager.activeNetworkInfo
+            return networkInfo != null && networkInfo.isConnected
+        }
+    }
+
     private fun convertUnixTimestampToFormattedDate(unixTimestamp: Long): String {
         val dateFormat = SimpleDateFormat("EEE, dd MMMM, HH:mm", Locale.getDefault())
         val date = Date(unixTimestamp * 1000)
         return dateFormat.format(date)
     }
-
 
 
 }

@@ -1,0 +1,43 @@
+<resources>
+    <string name="app_name">ClimeCast</string>
+    <string name="hello_blank_fragment">مرحباً بالشاشة الفارغة</string>
+    <string name="home_text_view">الصفحة الرئيسية</string>
+    <string name="alert_text_view">التنبيهات</string>
+    <string name="settings_text_view">الإعدادات</string>
+    <string name="favourite_text_view">المفضلة</string>
+    <string name="degree_text_view">درجة</string>
+    <string name="celsius_text">مئوية</string>
+    <string name="kelvin_text_view">كلفن</string>
+    <string name="wind_text_view">الرياح</string>
+    <string name="miles_hour_text">ميل في الساعة</string>
+    <string name="meter_sec_text">متر في الثانية</string>
+    <string name="language_text_view">اللغة</string>
+    <string name="english_text">الإنجليزية</string>
+    <string name="arabic_text">العربية</string>
+    <string name="dark_mode_text_view">الوضع الليلي</string>
+    <string name="location_text_view">الموقع</string>
+    <string name="gps_text">نظام تحديد المواقع</string>
+    <string name="map_text">الخريطة</string>
+    <string name="choose_a_loaction_button">اختر موقعًا</string>
+    <string name="min_text_view">الحد الأدنى</string>
+    <string name="max_text_view">الحد الأعلى</string>
+    <!-- Preference Titles -->
+    <string name="app_header">التطبيق</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">توقيعك</string>
+    <string name="language_title">اختيار اللغة</string>
+    <string name="units_title">اختيار الوحدة</string>
+    <!-- Sync Preferences -->
+    <string name="dark_mode_title">الوضع الليلي</string>
+    <string name="attachment_title">تنزيل المرفقات الواردة</string>
+    <string name="attachment_summary_on">تنزيل المرفقات تلقائيًا لرسائل البريد الواردة</string>
+    <string name="attachment_summary_off">تنزيل المرفقات فقط عند الطلب اليدوي</string>
+    <string name="weather_header">الطقس</string>
+    <string name="wind_title">وحدة الرياح</string>
+    <string name="temp_unit_title">وحدة الحرارة</string>
+    <string name="location_title">الموقع</string>
+    <string name="notification_title">الإشعارات</string>
+    <string name="start_time">وقت البدء</string>
+    <string name="end_time">وقت الانتهاء</string>
+</resources>

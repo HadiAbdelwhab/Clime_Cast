@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.climecast.database.Location
-import com.example.climecast.database.LocationsLocalDataSourceImpl
+import com.example.climecast.database.WeatherLocalDataSourceImpl
 import com.example.climecast.databinding.FragmentFavouriteBinding
 import com.example.climecast.model.WeatherRepositoryImpl
 import com.example.climecast.network.WeatherRemoteDataSourceImpl
@@ -53,7 +53,7 @@ class FavouriteFragment : Fragment() {
         favouriteViewModelFactory = FavouriteViewModelFactory(
             WeatherRepositoryImpl.getInstance(
                 WeatherRemoteDataSourceImpl.getInstance(),
-                LocationsLocalDataSourceImpl.getInstance(requireActivity())
+                WeatherLocalDataSourceImpl.getInstance(requireActivity())
             )
         )
         viewModel = ViewModelProvider(this, favouriteViewModelFactory)[FavouriteViewModel::class.java]
