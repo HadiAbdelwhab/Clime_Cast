@@ -5,21 +5,24 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.climecast.R
 import com.example.climecast.database.Location
 import com.example.climecast.database.WeatherLocalDataSourceImpl
 import com.example.climecast.databinding.FragmentFavouriteBinding
 import com.example.climecast.model.WeatherRepositoryImpl
 import com.example.climecast.network.WeatherRemoteDataSourceImpl
+import com.example.climecast.ui.ConfirmationDialogFragment
 import com.example.climecast.ui.favourite.viewmodel.FavouriteViewModel
 import com.example.climecast.ui.favourite.viewmodel.FavouriteViewModelFactory
 import kotlinx.coroutines.launch
 
-class FavouriteFragment : Fragment() {
+class FavouriteFragment : Fragment(), FavouriteClickListener {
 
     private lateinit var viewModel: FavouriteViewModel
     private lateinit var favouriteViewModelFactory: FavouriteViewModelFactory
@@ -46,20 +49,21 @@ class FavouriteFragment : Fragment() {
         setUpViewModel()
         setListeners()
         setObserver()
-        viewModel.addLocationToFavourite(Location("cairo",0.2,1.0))
+
     }
 
-    private fun setUpViewModel(){
+    private fun setUpViewModel() {
         favouriteViewModelFactory = FavouriteViewModelFactory(
             WeatherRepositoryImpl.getInstance(
                 WeatherRemoteDataSourceImpl.getInstance(),
                 WeatherLocalDataSourceImpl.getInstance(requireActivity())
             )
         )
-        viewModel = ViewModelProvider(this, favouriteViewModelFactory)[FavouriteViewModel::class.java]
+        viewModel =
+            ViewModelProvider(this, favouriteViewModelFactory)[FavouriteViewModel::class.java]
     }
 
-    private fun setObserver(){
+    private fun setObserver() {
         lifecycleScope.launch {
             viewModel.favouriteLocationsStateFlow.collect { list ->
                 _binding?.let {
@@ -68,6 +72,7 @@ class FavouriteFragment : Fragment() {
             }
         }
     }
+
     private fun setListeners() {
         binding.addNewLoactionButton.setOnClickListener {
             val action = FavouriteFragmentDirections.actionFavouriteFragmentToMapsFragment()
@@ -76,7 +81,7 @@ class FavouriteFragment : Fragment() {
     }
 
     private fun setAdapter(list: List<Location>) {
-        favouriteLocationAdapter = FavouriteLocationsAdapter(list)
+        favouriteLocationAdapter = FavouriteLocationsAdapter(list, this)
         binding.favouriteLocationsRecyclerView.apply {
             adapter = favouriteLocationAdapter
             layoutManager = LinearLayoutManager(requireActivity()).apply {
@@ -85,5 +90,12 @@ class FavouriteFragment : Fragment() {
         }
         favouriteLocationAdapter.notifyDataSetChanged()
     }
+
+    override fun onDeleteClick(location: Location) {
+        viewModel.deleteLocationFromFavourite(location)
+        favouriteLocationAdapter.notifyDataSetChanged()
+
+    }
+
 
 }

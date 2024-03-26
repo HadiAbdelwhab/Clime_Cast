@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
-    <uses-permission android:name="android.permission.BIND_JOB_SERVICE" /> <!-- Declare BIND_JOB_SERVICE permission here -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -27,7 +26,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCAAF_jxsAmyx5ykc-7pqcvZGmMY9RtVQo" />
 
-        <receiver android:name=".util.AlarmReceiver" />
+        <receiver android:name=".ui.alerts.notification.NotificationReceiver" />
 
         <activity
             android:name=".ui.MainActivity"

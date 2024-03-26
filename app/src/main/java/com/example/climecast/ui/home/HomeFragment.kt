@@ -98,7 +98,11 @@ class HomeFragment : Fragment() {
 
         } else {
             setupLocalObservers()
-
+            Toast.makeText(
+                requireActivity(),
+                "Offline mode, please check your connection",
+                Toast.LENGTH_LONG
+            ).show()
         }
 
 
@@ -107,26 +111,32 @@ class HomeFragment : Fragment() {
     private fun setupLocalObservers() {
         lifecycleScope.launch {
             viewModel.localWeatherStateFlow.collect { result ->
-
                 when (result) {
                     is ApiState.Error -> Log.i(TAG, "setupLocalObserversE: ")
                     ApiState.Loading -> Log.i(TAG, "setupLocalObserversL: ")
                     is ApiState.Success -> {
-                        Log.i(TAG, "setupLocalObservers1: " + result.data)
-                        //val gson = Gson().toJson(result.data.toString())
-
-                        val weatherData: WeatherResponse =
+                        val weatherData: WeatherResponse? =
                             Gson().fromJson(result.data.dataGson, WeatherResponse::class.java)
 
-                        Log.i(TAG, "setupLocalObservers2: " + weatherData)
-                        updateUI(weatherData)
-
-
+                        if (weatherData != null && isValidWeatherData(weatherData)) {
+                            updateUI(weatherData)
+                        } else {
+                            showToast("No weather data available")
+                        }
                     }
                 }
             }
         }
     }
+
+    private fun isValidWeatherData(weatherData: WeatherResponse): Boolean {
+        return weatherData.current != null && weatherData.daily.isNotEmpty() && weatherData.hourly.isNotEmpty()
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
 
     private fun setupViewModel() {
         homeViewModelFactory = HomeViewModelFactory(
@@ -269,7 +279,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun enableLocationServices() {
-        Toast.makeText(requireActivity(), "Turn on your location", Toast.LENGTH_LONG).show()
+        showToast("Turn on your location")
         val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
         startActivity(intent)
     }
@@ -311,17 +321,17 @@ class HomeFragment : Fragment() {
         return "$cityName $countryName"
     }
 
-    fun isInternetAvailable(context: Context): Boolean {
+    private fun isInternetAvailable(context: Context): Boolean {
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             val capabilities =
                 connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
-            return capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true
+            capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true
         } else {
             val networkInfo = connectivityManager.activeNetworkInfo
-            return networkInfo != null && networkInfo.isConnected
+            networkInfo != null && networkInfo.isConnected
         }
     }
 

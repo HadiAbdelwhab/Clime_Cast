@@ -45,4 +45,6 @@
     <string name="alert_time">Alert time\n</string>
     <string name="channel_description">alert channel</string>
     <string name="channel_name">channel_alert</string>
+    <string name="order_confirmation">Are you sure you want to delete this city?</string>
+    <string name="ok">Yes</string>
 </resources>

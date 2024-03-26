@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.climecast.R
@@ -23,7 +24,6 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import java.io.IOException
 
 class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapClickListener {
 
@@ -84,23 +84,31 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapClickListene
     private fun setListeners() {
         binding.chooseLocationButton.setOnClickListener {
             googleMap?.let { map ->
-                // Get the current location
                 val location = getCurrentLocation(map)
-                // Navigate to the next fragment with location data
-                viewModel.addLocationToFavourite(
-                    Location(
-                        longitude = location.longitude,
-                        latitude = location.latitude,
-                        city = getCityFromLocation(location.latitude, location.longitude)
+                val chosenCity = getCityFromLocation(location.latitude, location.longitude)
 
+                if (chosenCity.isEmpty() || chosenCity == "City not found") {
+                    showToast("Please select a valid location.")
+                } else {
+                    viewModel.addLocationToFavourite(
+                        Location(
+                            longitude = location.longitude,
+                            latitude = location.latitude,
+                            city = chosenCity
+                        )
                     )
-                )
-                val action = MapsFragmentDirections.actionMapsFragmentToFavouriteFragment()
-
-                findNavController().navigate(action)
+                    val action = MapsFragmentDirections.actionMapsFragmentToFavouriteFragment()
+                    findNavController().navigate(action)
+                }
             }
         }
     }
+
+
+    private fun showToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
 
     private fun getCurrentLocation(googleMap: GoogleMap): LatLng {
         val cameraPosition = googleMap.cameraPosition.target
