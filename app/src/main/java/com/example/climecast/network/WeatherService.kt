@@ -12,5 +12,12 @@ interface WeatherService {
         @Query("lon") longitude: Double,
         @Query("lang") language:String
     ): Response<WeatherResponse>
+
+    @GET("/onecall/timemachine")
+    suspend fun getWeatherForecastByTime(
+        @Query("lat") latitude: Double,
+        @Query("lon") longitude: Double,
+        @Query("dt") timeStamp:Long
+    ):Response<WeatherResponse>
 }
 

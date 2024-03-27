@@ -10,4 +10,8 @@ interface WeatherRemoteDataSource {
     suspend fun getWeatherForecast(
         lat: Double, lon: Double, language: String
     ): Flow<Response<WeatherResponse>>
+
+    suspend fun getWeatherForecastByTime(
+        lat: Double, lon: Double, timeStamp: Long
+    ): Flow<Response<WeatherResponse>>
 }

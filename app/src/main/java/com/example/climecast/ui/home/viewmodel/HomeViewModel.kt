@@ -2,9 +2,9 @@ package com.example.climecast.ui.home.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.climecast.database.WeatherData
+import com.example.climecast.model.WeatherData
 import com.example.climecast.model.WeatherResponse
-import com.example.climecast.model.WeatherRepository
+import com.example.climecast.repository.WeatherRepository
 import com.example.climecast.network.ApiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

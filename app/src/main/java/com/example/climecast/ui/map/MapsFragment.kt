@@ -11,10 +11,10 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.climecast.R
-import com.example.climecast.database.Location
+import com.example.climecast.model.Location
 import com.example.climecast.database.WeatherLocalDataSourceImpl
 import com.example.climecast.databinding.FragmentMapsBinding
-import com.example.climecast.model.WeatherRepositoryImpl
+import com.example.climecast.repository.WeatherRepositoryImpl
 import com.example.climecast.network.WeatherRemoteDataSourceImpl
 import com.example.climecast.ui.map.viewmodel.MapViewModel
 import com.example.climecast.ui.map.viewmodel.MapViewModelFactory

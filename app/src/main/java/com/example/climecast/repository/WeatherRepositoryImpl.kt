@@ -1,8 +1,9 @@
-package com.example.climecast.model
+package com.example.climecast.repository
 
-import com.example.climecast.database.Location
-import com.example.climecast.database.WeatherData
+import com.example.climecast.model.Location
+import com.example.climecast.model.WeatherData
 import com.example.climecast.database.WeatherLocalDataSource
+import com.example.climecast.model.WeatherResponse
 import com.example.climecast.network.WeatherRemoteDataSource
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
@@ -31,6 +32,7 @@ class WeatherRepositoryImpl private constructor(
         }
     }
 
+    //remote_data_source_methods
     override suspend fun getWeatherForecast(
         lat: Double,
         lon: Double,
@@ -39,6 +41,17 @@ class WeatherRepositoryImpl private constructor(
         return remoteDataSource.getWeatherForecast(lat, lon, language)
     }
 
+    override suspend fun getWeatherForecastByTime(
+        lat: Double,
+        lon: Double,
+        timeStamp: Long
+    ): Flow<Response<WeatherResponse>> {
+        return remoteDataSource.getWeatherForecastByTime(lat, lon, timeStamp)
+    }
+
+
+    //local_data_source_methods
+    //Location
     override fun getFavouriteLocations(): Flow<List<Location>> {
         return weatherLocalDataSource.getFavouriteLocation()
     }
@@ -51,6 +64,7 @@ class WeatherRepositoryImpl private constructor(
         weatherLocalDataSource.deleteLocation(location)
     }
 
+    //weather
     override suspend fun insertWeatherDate(weatherData: WeatherData) {
         weatherLocalDataSource.insertWeatherData(weatherData)
     }

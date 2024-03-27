@@ -27,13 +27,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.climecast.database.WeatherData
+import com.example.climecast.model.WeatherData
 import com.example.climecast.database.WeatherLocalDataSourceImpl
 import com.example.climecast.databinding.FragmentHomeBinding
 import com.example.climecast.model.DailyData
 import com.example.climecast.model.HourlyData
 import com.example.climecast.model.WeatherResponse
-import com.example.climecast.model.WeatherRepositoryImpl
+import com.example.climecast.repository.WeatherRepositoryImpl
 import com.example.climecast.network.ApiState
 import com.example.climecast.network.WeatherRemoteDataSourceImpl
 import com.example.climecast.ui.home.adapters.DaysWeatherDataAdapter

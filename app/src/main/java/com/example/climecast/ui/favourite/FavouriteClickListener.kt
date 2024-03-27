@@ -1,6 +1,6 @@
 package com.example.climecast.ui.favourite
 
-import com.example.climecast.database.Location
+import com.example.climecast.model.Location
 
 interface FavouriteClickListener {
 

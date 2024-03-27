@@ -7,7 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.climecast.R
-import com.example.climecast.database.Location
+import com.example.climecast.model.Location
 
 class FavouriteLocationsAdapter(
     private val locations: List<Location>,

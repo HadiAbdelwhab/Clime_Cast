@@ -30,8 +30,16 @@ class WeatherRemoteDataSourceImpl : WeatherRemoteDataSource {
     override suspend fun getWeatherForecast(
         lat: Double,
         lon: Double,
-        language:String
+        language: String
     ): Flow<Response<WeatherResponse>> {
-        return flow { emit(weatherService.getWeatherForecast(lat, lon,language)) }
+        return flow { emit(weatherService.getWeatherForecast(lat, lon, language)) }
+    }
+
+    override suspend fun getWeatherForecastByTime(
+        lat: Double,
+        lon: Double,
+        timeStamp: Double
+    ): Flow<Response<WeatherResponse>> {
+        return flow { emit(weatherService.getWeatherForecastByTime(lat, lon, timeStamp.toLong())) }
     }
 }

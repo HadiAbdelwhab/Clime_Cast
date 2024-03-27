@@ -1,4 +1,4 @@
-package com.example.climecast.database
+package com.example.climecast.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

@@ -1,5 +1,7 @@
 package com.example.climecast.database
 
+import com.example.climecast.model.Location
+import com.example.climecast.model.WeatherData
 import kotlinx.coroutines.flow.Flow
 
 interface WeatherLocalDataSource {

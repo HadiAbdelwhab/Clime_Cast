@@ -1,6 +1,8 @@
 package com.example.climecast.database
 
 import android.content.Context
+import com.example.climecast.model.Location
+import com.example.climecast.model.WeatherData
 import kotlinx.coroutines.flow.Flow
 
 class WeatherLocalDataSourceImpl(context: Context) : WeatherLocalDataSource {

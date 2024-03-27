@@ -1,7 +1,8 @@
-package com.example.climecast.model
+package com.example.climecast.repository
 
-import com.example.climecast.database.Location
-import com.example.climecast.database.WeatherData
+import com.example.climecast.model.Location
+import com.example.climecast.model.WeatherData
+import com.example.climecast.model.WeatherResponse
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 
@@ -13,11 +14,16 @@ interface WeatherRepository {
         language: String
     ): Flow<Response<WeatherResponse>>
 
+    suspend fun getWeatherForecastByTime(
+        lat: Double,
+        lon: Double,
+        timeStamp: Long
+    ): Flow<Response<WeatherResponse>>
 
     fun getFavouriteLocations(): Flow<List<Location>>
     suspend fun addLocation(location: Location)
     suspend fun deleteLocation(location: Location)
     suspend fun insertWeatherDate(weatherData: WeatherData)
     suspend fun deleteWeatherData()
-    fun getWeatherData():Flow<WeatherData>
+    fun getWeatherData(): Flow<WeatherData>
 }

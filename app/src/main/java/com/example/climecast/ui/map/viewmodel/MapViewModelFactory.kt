@@ -2,8 +2,7 @@ package com.example.climecast.ui.map.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.climecast.model.WeatherRepository
-import com.example.climecast.ui.favourite.viewmodel.FavouriteViewModel
+import com.example.climecast.repository.WeatherRepository
 
 class MapViewModelFactory(private val _repo: WeatherRepository):
     ViewModelProvider.Factory {

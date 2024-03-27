@@ -2,8 +2,8 @@ package com.example.climecast.ui.map.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.climecast.database.Location
-import com.example.climecast.model.WeatherRepository
+import com.example.climecast.model.Location
+import com.example.climecast.repository.WeatherRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

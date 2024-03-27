@@ -3,6 +3,7 @@ package com.example.climecast.database
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import com.example.climecast.model.WeatherData
 import kotlinx.coroutines.flow.Flow
 
 @Dao
