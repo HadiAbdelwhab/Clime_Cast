@@ -1,5 +1,6 @@
 package com.example.climecast.network
 
+import com.example.climecast.model.WeatherBytTimeResponse
 import com.example.climecast.model.WeatherResponse
 import retrofit2.Response
 import retrofit2.http.GET
@@ -10,14 +11,14 @@ interface WeatherService {
     suspend fun getWeatherForecast(
         @Query("lat") latitude: Double,
         @Query("lon") longitude: Double,
-        @Query("lang") language:String
+        @Query("lang") language: String
     ): Response<WeatherResponse>
 
-    @GET("/onecall/timemachine")
+    @GET("onecall/timemachine")
     suspend fun getWeatherForecastByTime(
         @Query("lat") latitude: Double,
         @Query("lon") longitude: Double,
-        @Query("dt") timeStamp:Long
-    ):Response<WeatherResponse>
+        @Query("dt") timeStamp: Long
+    ): Response<WeatherBytTimeResponse>
 }
 

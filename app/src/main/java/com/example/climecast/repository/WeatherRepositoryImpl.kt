@@ -3,6 +3,7 @@ package com.example.climecast.repository
 import com.example.climecast.model.Location
 import com.example.climecast.model.WeatherData
 import com.example.climecast.database.WeatherLocalDataSource
+import com.example.climecast.model.WeatherBytTimeResponse
 import com.example.climecast.model.WeatherResponse
 import com.example.climecast.network.WeatherRemoteDataSource
 import kotlinx.coroutines.flow.Flow
@@ -45,7 +46,7 @@ class WeatherRepositoryImpl private constructor(
         lat: Double,
         lon: Double,
         timeStamp: Long
-    ): Flow<Response<WeatherResponse>> {
+    ): Response<WeatherBytTimeResponse> {
         return remoteDataSource.getWeatherForecastByTime(lat, lon, timeStamp)
     }
 

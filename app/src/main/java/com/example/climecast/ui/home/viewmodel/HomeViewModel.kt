@@ -1,5 +1,6 @@
 package com.example.climecast.ui.home.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.climecast.model.WeatherData
@@ -11,6 +12,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
+
+private const val TAG = "HomeViewModel"
 
 class HomeViewModel(private val _repo: WeatherRepository) : ViewModel() {
 
@@ -24,11 +27,14 @@ class HomeViewModel(private val _repo: WeatherRepository) : ViewModel() {
 
     val localWeatherStateFlow = _localWeatherStateFlow.asStateFlow()
 
+
     init {
+        test()
         getWeatherLocalData()
     }
 
     fun getWeatherForecast(lat: Double, lon: Double, language: String) {
+        Log.i(TAG, "getWeatherForecast: ")
         viewModelScope.launch(Dispatchers.IO) {
             _repo.getWeatherForecast(lat, lon, language)
                 .catch { error ->
@@ -67,4 +73,22 @@ class HomeViewModel(private val _repo: WeatherRepository) : ViewModel() {
                 }
         }
     }
+
+    private fun test() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = _repo.getWeatherForecastByTime(
+                39.099724,
+                -94.578331,
+                1643803200
+            )
+            if (response.isSuccessful) {
+                Log.i(TAG, "test: " + response.body())
+            } else {
+                Log.i(TAG, "test: " + response.errorBody())
+            }
+        }
+
+    }
+
 }
+

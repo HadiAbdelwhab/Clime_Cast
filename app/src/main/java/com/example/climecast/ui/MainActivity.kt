@@ -1,13 +1,20 @@
 package com.example.climecast.ui
 
+
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.example.climecast.R
+import com.example.climecast.ui.alerts.notification.NotificationIntentService
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.util.jar.Manifest
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,7 +33,8 @@ class MainActivity : AppCompatActivity() {
         navController = findNavController(this, R.id.nav_host_fragment)
         setupWithNavController(bottomNavigationView, navController)
 
-        //bottomNavigationView.
+
+
 
     }
 

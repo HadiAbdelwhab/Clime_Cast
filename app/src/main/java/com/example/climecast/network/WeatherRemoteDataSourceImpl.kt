@@ -1,5 +1,6 @@
 package com.example.climecast.network
 
+import com.example.climecast.model.WeatherBytTimeResponse
 import com.example.climecast.model.WeatherResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -38,8 +39,9 @@ class WeatherRemoteDataSourceImpl : WeatherRemoteDataSource {
     override suspend fun getWeatherForecastByTime(
         lat: Double,
         lon: Double,
-        timeStamp: Double
-    ): Flow<Response<WeatherResponse>> {
-        return flow { emit(weatherService.getWeatherForecastByTime(lat, lon, timeStamp.toLong())) }
+        timeStamp: Long
+    ): Response<WeatherBytTimeResponse> {
+        return weatherService.getWeatherForecastByTime(lat, lon, timeStamp)
     }
+
 }

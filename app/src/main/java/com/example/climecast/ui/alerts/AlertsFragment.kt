@@ -15,10 +15,10 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.example.climecast.databinding.FragmentAlertsBinding
 import com.example.climecast.ui.alerts.notification.AlarmItem
+import com.example.climecast.ui.alerts.notification.NotificationIntentService
 import com.example.climecast.util.Constants.CHANNEL_ID
 import com.example.climecast.util.Constants.NOTIFICATION_PREM
 import com.example.climecast.ui.alerts.notification.NotificationReceiver
-import com.example.climecast.ui.alerts.notification.NotificationsSchedulerImpl
 import java.time.LocalDateTime
 import java.util.Calendar
 
@@ -46,13 +46,17 @@ class AlertsFragment : Fragment() {
         //scheduleNotification()
 
 
-        val scheduler = NotificationsSchedulerImpl(requireActivity())
+        //val scheduler = NotificationsSchedulerImpl(requireActivity())
         val item = AlarmItem(
             time = LocalDateTime.now().plusSeconds(10),
             message = "Message from alert"
         )
+
+        val intent = Intent(requireActivity(), NotificationIntentService::class.java)
+        NotificationIntentService.myEnqueueWork(requireActivity(), intent)
+
         //item?.let { scheduler::schedule }
-        scheduler.schedule(item)
+        //scheduler.schedule(item)
     }
 
     override fun onDestroyView() {
