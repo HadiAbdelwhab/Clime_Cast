@@ -3,6 +3,7 @@ package com.example.climecast.repository
 import com.example.climecast.model.Location
 import com.example.climecast.model.WeatherData
 import com.example.climecast.database.WeatherLocalDataSource
+import com.example.climecast.model.NotificationItem
 import com.example.climecast.model.WeatherBytTimeResponse
 import com.example.climecast.model.WeatherResponse
 import com.example.climecast.network.WeatherRemoteDataSource
@@ -76,5 +77,18 @@ class WeatherRepositoryImpl private constructor(
 
     override fun getWeatherData(): Flow<WeatherData> {
         return weatherLocalDataSource.getWeatherData()
+    }
+
+    override suspend fun insetNotification(notificationItem: NotificationItem) {
+        weatherLocalDataSource.insetNotification(notificationItem)
+    }
+
+    override suspend fun deleteAlertByTimestamp(primaryKey: Long) {
+        weatherLocalDataSource.deleteAlertByTimestamp(primaryKey)
+    }
+
+
+    override fun getAlerts(): Flow<List<NotificationItem>> {
+        return weatherLocalDataSource.getAlerts()
     }
 }

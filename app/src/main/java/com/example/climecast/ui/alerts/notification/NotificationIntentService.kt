@@ -64,6 +64,7 @@ class NotificationIntentService : JobIntentService() {
                 )
                 Log.i(TAG, "onHandleWork: $item")
 
+                repository.insetNotification(item)
                 scheduler.schedule(item)
 
 

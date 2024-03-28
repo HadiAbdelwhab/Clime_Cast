@@ -6,10 +6,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.climecast.R
-import com.example.climecast.model.AlertDTO
+import com.example.climecast.model.NotificationItem
 
 class AlertsAdapter(
-    private val alerts: List<AlertDTO>
+    private val alerts: List<NotificationItem>
 ) : RecyclerView.Adapter<AlertsAdapter.ViewHolder>() {
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val startTimeTextView: TextView = itemView.findViewById(R.id.start_time_text_view)
@@ -27,7 +27,7 @@ class AlertsAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.startTimeTextView.text = alerts[position].alertTime.toString()
+        holder.startTimeTextView.text = alerts[position].timestamp.toString()
         //holder.startDateTextView.text = alerts[position].alertDate.time.toString()
     }
 }

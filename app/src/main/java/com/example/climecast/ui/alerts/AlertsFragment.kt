@@ -9,13 +9,25 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.climecast.database.WeatherLocalDataSourceImpl
 import com.example.climecast.databinding.FragmentAlertsBinding
+import com.example.climecast.model.NotificationItem
+import com.example.climecast.network.WeatherRemoteDataSourceImpl
+import com.example.climecast.repository.WeatherRepositoryImpl
 import com.example.climecast.ui.alerts.notification.NotificationIntentService
+import com.example.climecast.ui.alerts.viewmodel.AlertViewModelFactory
+import com.example.climecast.ui.alerts.viewmodel.AlertsViewModel
 import com.example.climecast.util.Constants.NOTIFICATION_PREM
 import com.example.climecast.util.Constants.LATITUDE_KEY
 import com.example.climecast.util.Constants.LONGITUDE_KEY
 import com.example.climecast.util.Constants.TIME_STAMP_KEY
 import com.example.climecast.util.SharedPreferencesManger
+import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.TimeZone
 
@@ -25,6 +37,10 @@ class AlertsFragment : Fragment() {
     private var _binding: FragmentAlertsBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var viewModel: AlertsViewModel
+    private lateinit var factory: AlertViewModelFactory
+
+    private lateinit var adapter: AlertsAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,9 +54,47 @@ class AlertsFragment : Fragment() {
 
 
         requestNotificationPermission()
+
+        setUpViewModel()
+
         setListeners()
 
+        setObserver()
 
+    }
+
+    private fun setObserver() {
+        lifecycleScope.launch {
+            viewModel.alertsStateFlow.collect { list ->
+                setUpAdapter(list)
+            }
+        }
+    }
+
+    private fun setUpViewModel() {
+        factory = AlertViewModelFactory(
+            WeatherRepositoryImpl.getInstance(
+                WeatherRemoteDataSourceImpl.getInstance(),
+                WeatherLocalDataSourceImpl.getInstance(requireActivity())
+            )
+        )
+
+        viewModel =
+            ViewModelProvider(this, factory)[AlertsViewModel::class.java]
+    }
+
+    private fun setUpAdapter(notificationItemList: List<NotificationItem>) {
+        adapter = AlertsAdapter(notificationItemList)
+        binding.alertRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireActivity()).apply {
+                layoutManager = LinearLayoutManager(requireActivity()).apply {
+                    orientation = RecyclerView.VERTICAL
+
+                }
+
+            }
+        }
+        adapter.notifyDataSetChanged()
     }
 
     private fun setListeners() {
@@ -111,12 +165,17 @@ class AlertsFragment : Fragment() {
     private fun goToNotificationIntentService(timestamp: Long) {
         val intent = Intent(requireActivity(), NotificationIntentService::class.java)
         val longitude =
-            SharedPreferencesManger.getSharedPreferencesManagerCurrentLongitude(requireActivity())
+            SharedPreferencesManger.getSharedPreferencesManagerCurrentLongitude(
+                requireActivity()
+            )
         val latitude =
-            SharedPreferencesManger.getSharedPreferencesManagerCurrentLatitude(requireActivity())
+            SharedPreferencesManger.getSharedPreferencesManagerCurrentLatitude(
+                requireActivity()
+            )
         intent.putExtra(LATITUDE_KEY, latitude)
         intent.putExtra(LONGITUDE_KEY, longitude)
         intent.putExtra(TIME_STAMP_KEY, timestamp)
+
         NotificationIntentService.myEnqueueWork(requireActivity(), intent)
 
     }

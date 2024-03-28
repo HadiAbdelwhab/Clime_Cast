@@ -1,6 +1,7 @@
 package com.example.climecast.repository
 
 import com.example.climecast.model.Location
+import com.example.climecast.model.NotificationItem
 import com.example.climecast.model.WeatherBytTimeResponse
 import com.example.climecast.model.WeatherData
 import com.example.climecast.model.WeatherResponse
@@ -27,4 +28,7 @@ interface WeatherRepository {
     suspend fun insertWeatherDate(weatherData: WeatherData)
     suspend fun deleteWeatherData()
     fun getWeatherData(): Flow<WeatherData>
+    suspend fun insetNotification(notificationItem: NotificationItem)
+    suspend fun deleteAlertByTimestamp(primaryKey: Long)
+    fun getAlerts(): Flow<List<NotificationItem>>
 }

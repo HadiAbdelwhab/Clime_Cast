@@ -1,4 +1,4 @@
-package com.example.climecast.database
+package com.example.climecast.database.dao
 
 import androidx.room.Dao
 import androidx.room.Delete

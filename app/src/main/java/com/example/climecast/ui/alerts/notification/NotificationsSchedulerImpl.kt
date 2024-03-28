@@ -9,6 +9,7 @@ import com.example.climecast.model.NotificationItem
 import com.example.climecast.util.Constants.DESCRIPTION_KEY
 import com.example.climecast.util.Constants.ICON_KEY
 import com.example.climecast.util.Constants.TEMP_KEY
+import com.example.climecast.util.Constants.TIME_STAMP_KEY
 
 
 private const val TAG = "NotificationsSchedulerImpl"
@@ -23,12 +24,14 @@ class NotificationsSchedulerImpl(
             putExtra(DESCRIPTION_KEY, item.description)
             putExtra(ICON_KEY, item.icon)
             putExtra(TEMP_KEY, item.temperature)
+            putExtra(TIME_STAMP_KEY, item.timestamp)
+
             Log.i(TAG, "schedule: $item")
         }
 
         val pendingIntent = PendingIntent.getBroadcast(
             context,
-            1026,
+            item.hashCode(), // Use a unique request code for each alarm
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
