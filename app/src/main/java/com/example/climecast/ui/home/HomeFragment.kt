@@ -40,6 +40,8 @@ import com.example.climecast.ui.home.adapters.DaysWeatherDataAdapter
 import com.example.climecast.ui.home.adapters.HoursWeatherDataAdapter
 import com.example.climecast.ui.home.viewmodel.HomeViewModel
 import com.example.climecast.ui.home.viewmodel.HomeViewModelFactory
+import com.example.climecast.util.Constants.LANGUAGE_PREFERENCES
+import com.example.climecast.util.Constants.LATITUDE_PREFERENCES
 import com.example.climecast.util.SharedPreferencesManger
 import com.example.climecast.util.WeatherUtils
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -270,6 +272,12 @@ class HomeFragment : Fragment() {
                     val location = p0.lastLocation
                     latitude = location!!.latitude
                     longitude = location!!.longitude
+                    val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
+                    with(sharedPref.edit()) {
+                        putString(LANGUAGE_PREFERENCES, longitude.toString())
+                        putString(LATITUDE_PREFERENCES, latitude.toString())
+                        apply()
+                    }
                     viewModel.getWeatherForecast(latitude, longitude, language)
                     fusedLocationProviderClient.removeLocationUpdates(this)
                 }

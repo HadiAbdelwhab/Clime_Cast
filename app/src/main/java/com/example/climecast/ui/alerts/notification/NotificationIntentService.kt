@@ -44,8 +44,8 @@ class NotificationIntentService : JobIntentService() {
 
 
         GlobalScope.launch(Dispatchers.IO) {
-            val longitude = intent.getDoubleExtra(LONGITUDE_KEY, 0.0)
-            val latitude = intent.getDoubleExtra(LATITUDE_KEY, 0.0)
+            val longitude = intent.getStringExtra(LONGITUDE_KEY).toString().toDouble()
+            val latitude = intent.getStringExtra(LATITUDE_KEY).toString().toDouble()
             val timeStamp = intent.getLongExtra(TIME_STAMP_KEY, 0)
             Log.i(TAG, "onHandleWork long: $longitude  lat $latitude + time $timeStamp")
             val response = repository.getWeatherForecastByTime(

@@ -6,6 +6,8 @@ object Constants {
     const val TEMP_UNIT_PREFERENCES = "temp_unit"
     const val WIND_UNIT_PREFERENCES = "wind_unit"
     const val LANGUAGE_PREFERENCES = "language"
+    const val LONGITUDE_PREFERENCES = "lon"
+    const val LATITUDE_PREFERENCES = "lat"
     const val CHANNEL_ID = "CHANNEL_ID"
     const val NOTIFICATION_PREM = 101
     const val MAP_API_KEY = "AIzaSyCAAF_jxsAmyx5ykc-7pqcvZGmMY9RtVQo"
