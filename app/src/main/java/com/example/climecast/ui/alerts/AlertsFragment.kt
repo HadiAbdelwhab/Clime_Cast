@@ -1,9 +1,10 @@
 package com.example.climecast.ui.alerts
 
 import android.app.AlarmManager
-import android.app.NotificationChannel
+import android.app.DatePickerDialog
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -14,13 +15,15 @@ import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.example.climecast.databinding.FragmentAlertsBinding
-import com.example.climecast.ui.alerts.notification.AlarmItem
 import com.example.climecast.ui.alerts.notification.NotificationIntentService
 import com.example.climecast.util.Constants.CHANNEL_ID
 import com.example.climecast.util.Constants.NOTIFICATION_PREM
 import com.example.climecast.ui.alerts.notification.NotificationReceiver
-import java.time.LocalDateTime
+import com.example.climecast.util.Constants.LATITUDE_KEY
+import com.example.climecast.util.Constants.LONGITUDE_KEY
+import com.example.climecast.util.Constants.TIME_STAMP_KEY
 import java.util.Calendar
+import java.util.TimeZone
 
 class AlertsFragment : Fragment() {
 
@@ -40,23 +43,95 @@ class AlertsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //createNotificationChannel()
+
         requestNotificationPermission()
-        //checkNotificationEnabled()
-        //scheduleNotification()
+        setListeners()
 
 
-        //val scheduler = NotificationsSchedulerImpl(requireActivity())
-        val item = AlarmItem(
-            time = LocalDateTime.now().plusSeconds(10),
-            message = "Message from alert"
+    }
+
+    private fun setListeners() {
+        binding.addAlarmButton.setOnClickListener {
+
+            showDateTimePicker()
+
+
+        }
+    }
+
+    private fun showDateTimePicker() {
+        val calendar = Calendar.getInstance()
+        val currentYear = calendar.get(Calendar.YEAR)
+        val currentMonth = calendar.get(Calendar.MONTH)
+        val currentDay = calendar.get(Calendar.DAY_OF_MONTH)
+        val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
+        val currentMinute = calendar.get(Calendar.MINUTE)
+
+        // Show DatePickerDialog
+        val datePickerDialog = DatePickerDialog(
+            requireActivity(),
+            { _, year, month, day ->
+                // Show TimePickerDialog after selecting the date
+                showTimePicker(year, month, day)
+            },
+            currentYear,
+            currentMonth,
+            currentDay
         )
+        datePickerDialog.datePicker.minDate =
+            System.currentTimeMillis() // Set minimum date to today
+        datePickerDialog.show()
+    }
 
+    private fun showTimePicker(year: Int, month: Int, day: Int) {
+        val calendar = Calendar.getInstance()
+        val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
+        val currentMinute = calendar.get(Calendar.MINUTE)
+
+        // Show TimePickerDialog
+        val timePickerDialog = TimePickerDialog(
+            requireActivity(),
+            { _, hourOfDay, minute ->
+                // Handle the selected date and time
+                handleDateTimeSelected(year, month, day, hourOfDay, minute)
+            },
+            currentHour,
+            currentMinute,
+            true
+        )
+        timePickerDialog.show()
+    }
+
+    private fun handleDateTimeSelected(
+        year: Int,
+        month: Int,
+        day: Int,
+        hourOfDay: Int,
+        minute: Int
+    ) {
+        // Handle the selected date and time here
+        val calendar = Calendar.getInstance()
+        calendar.timeZone = TimeZone.getTimeZone("UTC") // Set time zone to UTC
+        calendar.set(year, month, day, hourOfDay, minute)
+
+        // Convert selected date and time to Unix timestamp
+        val timeStamp = calendar.timeInMillis / 1000 // Convert milliseconds to seconds
+
+        // Perform your action with the selected date and time
+        goToNotificationIntentService(39.099724, -94.578331, timeStamp)
+    }
+
+    private fun goToNotificationIntentService(
+        latitude: Double,
+        longitude: Double,
+        timestamp: Long
+    ) {
         val intent = Intent(requireActivity(), NotificationIntentService::class.java)
+        intent.putExtra(LATITUDE_KEY, latitude)
+        intent.putExtra(LONGITUDE_KEY, longitude)
+        intent.putExtra(TIME_STAMP_KEY, timestamp)
         NotificationIntentService.myEnqueueWork(requireActivity(), intent)
 
-        //item?.let { scheduler::schedule }
-        //scheduler.schedule(item)
     }
 
     override fun onDestroyView() {
@@ -64,20 +139,6 @@ class AlertsFragment : Fragment() {
         _binding = null
     }
 
-    private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channelId = "alarm_id"
-            val channelName = "alarm_name"
-            val notificationManager =
-                activity?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            val channel = NotificationChannel(
-                channelId,
-                channelName,
-                NotificationManager.IMPORTANCE_HIGH
-            )
-            notificationManager.createNotificationChannel(channel)
-        }
-    }
 
     private fun requestNotificationPermission() {
         ActivityCompat.requestPermissions(

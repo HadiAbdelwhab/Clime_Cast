@@ -1,14 +1,16 @@
 package com.example.climecast.ui.alerts.notification
 
-import android.app.IntentService
 import android.content.Intent
 import android.content.Context
 import android.util.Log
 import androidx.core.app.JobIntentService
-import androidx.core.app.JobIntentService.enqueueWork
 import com.example.climecast.database.WeatherLocalDataSourceImpl
+import com.example.climecast.model.NotificationItem
 import com.example.climecast.network.WeatherRemoteDataSourceImpl
 import com.example.climecast.repository.WeatherRepositoryImpl
+import com.example.climecast.util.Constants.LATITUDE_KEY
+import com.example.climecast.util.Constants.LONGITUDE_KEY
+import com.example.climecast.util.Constants.TIME_STAMP_KEY
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -37,14 +39,37 @@ class NotificationIntentService : JobIntentService() {
             WeatherLocalDataSourceImpl.getInstance(this)
         )
 
+
+
+
+
         GlobalScope.launch(Dispatchers.IO) {
+            val longitude = intent.getDoubleExtra(LONGITUDE_KEY, 0.0)
+            val latitude = intent.getDoubleExtra(LATITUDE_KEY, 0.0)
+            val timeStamp = intent.getLongExtra(TIME_STAMP_KEY, 0)
+            Log.i(TAG, "onHandleWork long: $longitude  lat $latitude + time $timeStamp")
             val response = repository.getWeatherForecastByTime(
-                39.099724,
-                -94.578331,
-                1643803200
+                latitude,
+                longitude,
+                timeStamp
             )
             if (response.isSuccessful) {
-                Log.i(TAG, "onHandleWork: ${response.body()}")
+                Log.i(TAG, "onHandleWork: isSuccessful ${response.body()}")
+                val scheduler = NotificationsSchedulerImpl(this@NotificationIntentService)
+                val item = NotificationItem(
+                    description = response.body()!!.data[0].weather[0].description,
+                    temperature = response.body()!!.data[0].temp,
+                    icon = response.body()!!.data[0].weather[0].icon,
+                    timestamp = timeStamp
+                )
+                Log.i(TAG, "onHandleWork: $item")
+
+                scheduler.schedule(item)
+
+
+            }else{
+
+                Log.i(TAG, "onHandleWork: failed call ${response.code()}")
             }
         }
     }

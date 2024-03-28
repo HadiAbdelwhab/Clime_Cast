@@ -5,36 +5,44 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import java.time.LocalDateTime
-import java.time.ZoneId
+import com.example.climecast.model.NotificationItem
+import com.example.climecast.util.Constants.DESCRIPTION_KEY
+import com.example.climecast.util.Constants.ICON_KEY
+import com.example.climecast.util.Constants.TEMP_KEY
 
-private const val TAG = "NotificationWorker"
+
+private const val TAG = "NotificationsSchedulerImpl"
 
 class NotificationsSchedulerImpl(
     private val context: Context
 ) : NotificationsScheduler {
 
-    private val alarmManger = context.getSystemService(AlarmManager::class.java)
-    override fun schedule(item: AlarmItem) {
+    private val alarmManager = context.getSystemService(AlarmManager::class.java)
+    override fun schedule(item: NotificationItem) {
         val intent = Intent(context, NotificationReceiver::class.java).apply {
-            putExtra("EXTRA_MESSAGE", item.message)
+            putExtra(DESCRIPTION_KEY, item.description)
+            putExtra(ICON_KEY, item.icon)
+            putExtra(TEMP_KEY, item.temperature)
+            Log.i(TAG, "schedule: $item")
         }
-        val alarmTime = item.time.atZone(ZoneId.systemDefault()).toEpochSecond() * 1000L
-        alarmManger.setExactAndAllowWhileIdle(
-            AlarmManager.RTC_WAKEUP,
-            alarmTime,
-            PendingIntent.getBroadcast(
-                context,
-                item.hashCode(),
-                intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-            )
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            1026,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-        Log.e("Alarm", "Alarm set at $alarmTime")
+
+        alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.RTC_WAKEUP,
+            item.timestamp,
+            pendingIntent
+        )
+
     }
 
-    override fun cancel(item: AlarmItem) {
-        alarmManger.cancel(
+    override fun cancel(item: NotificationItem) {
+        alarmManager.cancel(
             PendingIntent.getBroadcast(
                 context,
                 1026,
@@ -46,7 +54,3 @@ class NotificationsSchedulerImpl(
 
 }
 
-data class AlarmItem(
-    val time: LocalDateTime,
-    val message: String
-)
