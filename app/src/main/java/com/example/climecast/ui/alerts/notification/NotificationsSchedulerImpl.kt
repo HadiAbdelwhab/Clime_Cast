@@ -37,15 +37,12 @@ class NotificationsSchedulerImpl(
         )
 
 
-        val twoHours = 60 * 60 * 2 * 1000L
-        val staticAlarmTime = System.currentTimeMillis() + twoHours
 
         alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
             item.timestamp,
             pendingIntent
         )
-        Log.i(TAG, "schedule: alarmManager ${staticAlarmTime}")
 
     }
 

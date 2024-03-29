@@ -31,6 +31,7 @@
             android:layout_marginEnd="12dp"
             app:cardCornerRadius="25dp"
             app:cardElevation="25dp"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/current_city_text_view">
@@ -173,9 +174,10 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/hours_recycler_view"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/current_weather_card" />
+            android:layout_marginTop="80dp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/hours_recycler_view"

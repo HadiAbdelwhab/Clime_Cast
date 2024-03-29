@@ -42,6 +42,11 @@ class SharedPreferencesManger {
             sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
             return sharedPreferences.getString(LONGITUDE_PREFERENCES, "0.0").toString()
         }
+
+        fun getSharedPreferencesManagerLocation(context: Context): String {
+            sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+            return sharedPreferences.getString(Constants.LOCATION_PREFERENCES, "GPS").toString()
+        }
     }
 
 }

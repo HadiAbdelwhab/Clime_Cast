@@ -43,7 +43,9 @@ import com.example.climecast.ui.home.viewmodel.HomeViewModelFactory
 import com.example.climecast.util.Constants.LANGUAGE_PREFERENCES
 import com.example.climecast.util.Constants.LATITUDE_PREFERENCES
 import com.example.climecast.util.SharedPreferencesManger
-import com.example.climecast.util.WeatherUtils
+import com.example.climecast.util.WeatherUtils.Companion.kelvinToCelsius
+import com.example.climecast.util.WeatherUtils.Companion.kelvinToFahrenheit
+import com.example.climecast.util.WeatherUtils.Companion.meterPerSecondToMilesPerHour
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
@@ -132,7 +134,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun isValidWeatherData(weatherData: WeatherResponse): Boolean {
-        return weatherData.current != null && weatherData.daily.isNotEmpty() && weatherData.hourly.isNotEmpty()
+        return weatherData.daily.isNotEmpty() && weatherData.hourly.isNotEmpty()
     }
 
     private fun showToast(message: String) {
@@ -155,6 +157,7 @@ class HomeFragment : Fragment() {
             viewModel.weatherForecastStateFlow.collect { result ->
                 when (result) {
                     is ApiState.Success -> {
+                        binding.currentWeatherCard.visibility = View.VISIBLE
                         updateUI(result.data)
 
                         val gson = Gson()
@@ -170,6 +173,7 @@ class HomeFragment : Fragment() {
                     is ApiState.Error -> {
                         Log.i(TAG, "onViewCreated: $result")
                         binding.homeProgressBar.visibility = View.GONE
+
                     }
 
                     ApiState.Loading -> {
@@ -190,14 +194,15 @@ class HomeFragment : Fragment() {
             SharedPreferencesManger.getSharedPreferencesManagerWindUnit(requireActivity())
 
         binding.currentTemperatureTextView.text = when (tempUnit) {
-            "celsius" -> WeatherUtils.kelvinToCelsius(data.current.temperature)
-            "Fahrenheit" -> WeatherUtils.kelvinToFahrenheit(data.current.temperature)
+            "celsius" -> kelvinToCelsius(data.current.temperature)
+            "Fahrenheit" -> kelvinToFahrenheit(data.current.temperature)
             else -> data.current.temperature.toString()
         }
 
+        binding.currentWeatherDescriptionTextView.text = data.current.weather[0].description
         binding.windTextView.text = when (windUnit) {
             "meter/second" -> "${data.current.windSpeed} m/s"
-            else -> "${WeatherUtils.meterPerSecondToMilesPerHour(data.current.windSpeed)} m/h"
+            else -> "${meterPerSecondToMilesPerHour(data.current.windSpeed)} m/h"
         }
 
         Glide.with(requireActivity())

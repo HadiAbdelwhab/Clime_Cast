@@ -16,7 +16,7 @@ import com.example.climecast.util.Constants.DESCRIPTION_KEY
 import com.example.climecast.util.Constants.ICON_KEY
 import com.example.climecast.util.Constants.TEMP_KEY
 import com.example.climecast.util.Constants.TIME_STAMP_KEY
-import com.example.climecast.util.WeatherUtils
+import com.example.climecast.util.WeatherUtils.Companion.kelvinToCelsius
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -29,7 +29,7 @@ class NotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         val description = intent?.getStringExtra(DESCRIPTION_KEY)
         val icon = intent?.getStringExtra(ICON_KEY)
-        val temperature = WeatherUtils.kelvinToCelsius(intent?.getDoubleExtra(TEMP_KEY, 0.0)!!)
+        val temperature = kelvinToCelsius(intent?.getDoubleExtra(TEMP_KEY, 0.0)!!)
         val timestamp = intent.getLongExtra(TIME_STAMP_KEY, 0)
         repository = WeatherRepositoryImpl.getInstance(
             WeatherRemoteDataSourceImpl.getInstance(),

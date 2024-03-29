@@ -45,7 +45,7 @@ class DaysWeatherDataAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val dailyItem = dailyData[position]
         val formattedDate = if (position == 0) {
-            "Tomorrow"
+            "Today"
         } else {
             formatDate(dailyItem.timestamp)
         }
