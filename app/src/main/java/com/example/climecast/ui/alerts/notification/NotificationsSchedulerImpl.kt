@@ -31,25 +31,31 @@ class NotificationsSchedulerImpl(
 
         val pendingIntent = PendingIntent.getBroadcast(
             context,
-            item.hashCode(), // Use a unique request code for each alarm
+            item.hashCode(),
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
+
+
+        val twoHours = 60 * 60 * 2 * 1000L
+        val staticAlarmTime = System.currentTimeMillis() + twoHours
 
         alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
             item.timestamp,
             pendingIntent
         )
+        Log.i(TAG, "schedule: alarmManager ${staticAlarmTime}")
 
     }
+
 
     override fun cancel(item: NotificationItem) {
         alarmManager.cancel(
             PendingIntent.getBroadcast(
                 context,
-                1026,
-                Intent(),//(context, NotificationReceiver::class.java
+                item.hashCode(),
+                Intent(),
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
         )

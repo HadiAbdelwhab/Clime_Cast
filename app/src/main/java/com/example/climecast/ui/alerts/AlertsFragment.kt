@@ -4,6 +4,7 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +12,6 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.climecast.database.WeatherLocalDataSourceImpl
@@ -31,6 +31,7 @@ import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.TimeZone
 
+private const val TAG = "AlertsFragment"
 class AlertsFragment : Fragment() {
 
 
@@ -67,6 +68,7 @@ class AlertsFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.alertsStateFlow.collect { list ->
                 setUpAdapter(list)
+                Log.i(TAG, "setObserver: ${list.size}")
             }
         }
     }
@@ -84,18 +86,17 @@ class AlertsFragment : Fragment() {
     }
 
     private fun setUpAdapter(notificationItemList: List<NotificationItem>) {
+        Log.i(TAG, "setUpAdapter: ${notificationItemList.size}")
         adapter = AlertsAdapter(notificationItemList)
         binding.alertRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireActivity()).apply {
-                layoutManager = LinearLayoutManager(requireActivity()).apply {
-                    orientation = RecyclerView.VERTICAL
-
-                }
-
+                orientation = RecyclerView.VERTICAL
             }
+            adapter = this@AlertsFragment.adapter
         }
         adapter.notifyDataSetChanged()
     }
+
 
     private fun setListeners() {
         binding.addAlarmButton.setOnClickListener {
@@ -154,13 +155,22 @@ class AlertsFragment : Fragment() {
         minute: Int
     ) {
         val calendar = Calendar.getInstance()
-        calendar.timeZone = TimeZone.getTimeZone("UTC") // Set time zone to UTC
-        calendar.set(year, month, day, hourOfDay, minute)
+        calendar.set(Calendar.YEAR, year)
+        calendar.set(Calendar.MONTH, month)
+        calendar.set(Calendar.DAY_OF_MONTH, day)
+        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
+        calendar.set(Calendar.MINUTE, minute)
+        calendar.set(Calendar.SECOND, 0) // Reset seconds to zero if necessary
 
-        val timeStamp = calendar.timeInMillis / 1000 // Convert milliseconds to seconds
+        // Subtracting 2 hours
+       // calendar.add(Calendar.HOUR_OF_DAY, -2)
 
+        val timeStamp = calendar.timeInMillis // Convert calendar time to milliseconds
+        Log.i(TAG, "handleDateTimeSelected: $timeStamp")
         goToNotificationIntentService(timeStamp)
     }
+
+
 
     private fun goToNotificationIntentService(timestamp: Long) {
         val intent = Intent(requireActivity(), NotificationIntentService::class.java)

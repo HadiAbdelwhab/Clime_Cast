@@ -51,7 +51,7 @@ class NotificationIntentService : JobIntentService() {
             val response = repository.getWeatherForecastByTime(
                 latitude,
                 longitude,
-                timeStamp
+                timeStamp/1000
             )
             if (response.isSuccessful) {
                 Log.i(TAG, "onHandleWork: isSuccessful ${response.body()}")

@@ -6,12 +6,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".ui.alerts.AlertsFragment">
-<androidx.recyclerview.widget.RecyclerView
-    android:id="@+id/alert_recycler_view"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/alert_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_alarm_button"
         android:layout_width="wrap_content"
