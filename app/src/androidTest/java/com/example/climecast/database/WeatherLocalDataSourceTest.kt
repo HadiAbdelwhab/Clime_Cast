@@ -14,6 +14,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -40,7 +41,7 @@ class WeatherLocalDataSourceTest {
         database = Room.inMemoryDatabaseBuilder(
             ApplicationProvider.getApplicationContext(),
             WeatherDatabase::class.java
-        ).build()
+        ).allowMainThreadQueries().build()
 
         weatherDataDao = database.weatherDateDao()
         locationsDao = database.locationDao()
@@ -56,7 +57,7 @@ class WeatherLocalDataSourceTest {
 
 
     @Test
-    fun addLocation() = runBlocking {
+    fun addLocation() = runTest {
         val location = Location("City",1.0,1.0)
         localDataSource.addLocation(location)
         delay(10000) // Adjust the delay time as needed

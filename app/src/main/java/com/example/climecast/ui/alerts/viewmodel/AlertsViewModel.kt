@@ -30,12 +30,17 @@ class AlertsViewModel(private val _repo: WeatherRepository) : ViewModel() {
         }
     }
 
+    fun deleteAlert(notificationItem: NotificationItem) {
+        viewModelScope.launch {
+            _repo.deleteAlertByTimestamp(notificationItem.timestamp)
+        }
+    }
+
     fun insertAlert(notificationItem: NotificationItem) {
         viewModelScope.launch(Dispatchers.IO) {
             _repo.insetNotification(notificationItem)
         }
     }
-
 
 
 }

@@ -24,6 +24,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -79,6 +80,7 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         // Inflate the layout for this fragment
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
@@ -275,8 +277,10 @@ class HomeFragment : Fragment() {
                 override fun onLocationResult(p0: LocationResult) {
                     super.onLocationResult(p0)
                     val location = p0.lastLocation
-                    latitude = location!!.latitude
-                    longitude = location!!.longitude
+                        latitude = location!!.latitude
+                        longitude = location!!.longitude
+ 
+
                     val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
                     with(sharedPref.edit()) {
                         putString(LANGUAGE_PREFERENCES, longitude.toString())

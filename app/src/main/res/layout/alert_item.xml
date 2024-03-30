@@ -50,6 +50,7 @@
             tools:text="3 Feb" />
 
         <ImageView
+            android:id="@+id/delete_alert_image_view"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:src="@drawable/ic_delete"

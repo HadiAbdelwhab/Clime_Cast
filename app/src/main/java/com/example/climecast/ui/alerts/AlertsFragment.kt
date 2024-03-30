@@ -20,6 +20,7 @@ import com.example.climecast.model.NotificationItem
 import com.example.climecast.network.WeatherRemoteDataSourceImpl
 import com.example.climecast.repository.WeatherRepositoryImpl
 import com.example.climecast.ui.alerts.notification.NotificationIntentService
+import com.example.climecast.ui.alerts.notification.NotificationsSchedulerImpl
 import com.example.climecast.ui.alerts.viewmodel.AlertViewModelFactory
 import com.example.climecast.ui.alerts.viewmodel.AlertsViewModel
 import com.example.climecast.util.Constants.NOTIFICATION_PREM
@@ -29,10 +30,10 @@ import com.example.climecast.util.Constants.TIME_STAMP_KEY
 import com.example.climecast.util.SharedPreferencesManger
 import kotlinx.coroutines.launch
 import java.util.Calendar
-import java.util.TimeZone
 
 private const val TAG = "AlertsFragment"
-class AlertsFragment : Fragment() {
+
+class AlertsFragment : Fragment(), AlertClickListener {
 
 
     private var _binding: FragmentAlertsBinding? = null
@@ -87,7 +88,7 @@ class AlertsFragment : Fragment() {
 
     private fun setUpAdapter(notificationItemList: List<NotificationItem>) {
         Log.i(TAG, "setUpAdapter: ${notificationItemList.size}")
-        adapter = AlertsAdapter(notificationItemList)
+        adapter = AlertsAdapter(notificationItemList, this)
         binding.alertRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireActivity()).apply {
                 orientation = RecyclerView.VERTICAL
@@ -163,13 +164,12 @@ class AlertsFragment : Fragment() {
         calendar.set(Calendar.SECOND, 0) // Reset seconds to zero if necessary
 
         // Subtracting 2 hours
-       // calendar.add(Calendar.HOUR_OF_DAY, -2)
+        // calendar.add(Calendar.HOUR_OF_DAY, -2)
 
         val timeStamp = calendar.timeInMillis // Convert calendar time to milliseconds
         Log.i(TAG, "handleDateTimeSelected: $timeStamp")
         goToNotificationIntentService(timeStamp)
     }
-
 
 
     private fun goToNotificationIntentService(timestamp: Long) {
@@ -202,6 +202,14 @@ class AlertsFragment : Fragment() {
             arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),
             NOTIFICATION_PREM
         )
+    }
+
+    override fun cancelAlert(notificationItem: NotificationItem) {
+        val scheduler = NotificationsSchedulerImpl(requireActivity())
+        scheduler.cancel(notificationItem)
+        viewModel.deleteAlert(notificationItem)
+        adapter.notifyDataSetChanged()
+
     }
 
 

@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.climecast.R
 import com.example.climecast.model.Location
@@ -18,6 +19,7 @@ class FavouriteLocationsAdapter(
         val locationNameTextView: TextView = itemView.findViewById(R.id.location_name_text_view)
         val deleteLocationImageView: ImageView =
             itemView.findViewById(R.id.delete_favourite_item_image_view)
+        val favouriteItem: ConstraintLayout = itemView.findViewById(R.id.favourite_item)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -35,6 +37,9 @@ class FavouriteLocationsAdapter(
         holder.locationNameTextView.text = locations[position].city
         holder.deleteLocationImageView.setOnClickListener {
             listener.onDeleteClick(locations[position])
+        }
+        holder.favouriteItem.setOnClickListener {
+            listener.onShowDetails(locations[position])
         }
 
     }

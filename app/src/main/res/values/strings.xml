@@ -49,4 +49,5 @@
     <string name="ok">Yes</string>
     <string name="dark_mode_enabled">enable_dark_mode</string>
     <string name="dark_mode_disabled">disable_dark_mode</string>
+    <string name="choose_a_from_map_button">Choose a From Map</string>
 </resources>
