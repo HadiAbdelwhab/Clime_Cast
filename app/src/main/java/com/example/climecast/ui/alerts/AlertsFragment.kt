@@ -33,7 +33,7 @@ import java.util.Calendar
 
 private const val TAG = "AlertsFragment"
 
-class AlertsFragment : Fragment(), AlertClickListener {
+class AlertsFragment : Fragment(), AlertClickListener, AlertDialogFragment.AlertDialogListener {
 
 
     private var _binding: FragmentAlertsBinding? = null
@@ -43,6 +43,9 @@ class AlertsFragment : Fragment(), AlertClickListener {
     private lateinit var factory: AlertViewModelFactory
 
     private lateinit var adapter: AlertsAdapter
+
+    private var notificationItemToDelete: NotificationItem? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -204,13 +207,18 @@ class AlertsFragment : Fragment(), AlertClickListener {
         )
     }
 
-    override fun cancelAlert(notificationItem: NotificationItem) {
-        val scheduler = NotificationsSchedulerImpl(requireActivity())
-        scheduler.cancel(notificationItem)
-        viewModel.deleteAlert(notificationItem)
-        adapter.notifyDataSetChanged()
 
+    override fun cancelAlert(notificationItem: NotificationItem) {
+        notificationItemToDelete = notificationItem
+        val alertDialogFragment = AlertDialogFragment()
+        alertDialogFragment.setAlertDialogListener(this)
+        alertDialogFragment.show(parentFragmentManager, "AlertDialogFragment")
     }
 
-
+    override fun onPositiveButtonClick() {
+        val scheduler = NotificationsSchedulerImpl(requireActivity())
+        notificationItemToDelete?.let { scheduler.cancel(it) }
+        notificationItemToDelete?.let { viewModel.deleteAlert(it) }
+        adapter.notifyDataSetChanged()
+    }
 }

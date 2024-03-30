@@ -1,4 +1,4 @@
-package com.example.climecast.ui.favourite
+package com.example.climecast.ui.favourite.adapters
 
 import com.example.climecast.model.Location
 

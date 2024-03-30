@@ -15,15 +15,22 @@ import com.example.climecast.database.WeatherLocalDataSourceImpl
 import com.example.climecast.databinding.FragmentFavouriteBinding
 import com.example.climecast.repository.WeatherRepositoryImpl
 import com.example.climecast.network.WeatherRemoteDataSourceImpl
+import com.example.climecast.ui.favourite.adapters.FavouriteClickListener
+import com.example.climecast.ui.favourite.adapters.FavouriteLocationsAdapter
 import com.example.climecast.ui.favourite.viewmodel.FavouriteViewModel
 import com.example.climecast.ui.favourite.viewmodel.FavouriteViewModelFactory
 import kotlinx.coroutines.launch
 
-class FavouriteFragment : Fragment(), FavouriteClickListener {
+class FavouriteFragment : Fragment(), FavouriteClickListener,
+    FavouriteDialogFragment.FavouriteDialogListener {
 
     private lateinit var viewModel: FavouriteViewModel
     private lateinit var favouriteViewModelFactory: FavouriteViewModelFactory
+
     private lateinit var favouriteLocationAdapter: FavouriteLocationsAdapter
+
+    private var deletedLocation: Location? = null
+
     private var _binding: FragmentFavouriteBinding? = null
     private val binding get() = _binding!!
 
@@ -88,11 +95,7 @@ class FavouriteFragment : Fragment(), FavouriteClickListener {
         favouriteLocationAdapter.notifyDataSetChanged()
     }
 
-    override fun onDeleteClick(location: Location) {
-        viewModel.deleteLocationFromFavourite(location)
-        favouriteLocationAdapter.notifyDataSetChanged()
 
-    }
 
     override fun onShowDetails(location: Location) {
         val action = FavouriteFragmentDirections.actionFavouriteFragmentToHomeFragment(
@@ -101,6 +104,17 @@ class FavouriteFragment : Fragment(), FavouriteClickListener {
         )
         findNavController().navigate(action)
 
+    }
+    override fun onDeleteClick(location: Location) {
+        deletedLocation = location
+        val alertFragmentDialog=FavouriteDialogFragment()
+        alertFragmentDialog.setAlertDialogListener(this)
+        alertFragmentDialog.show(parentFragmentManager,"alertFragmentDialog")
+
+    }
+    override fun onPositiveButtonClick() {
+        deletedLocation?.let { viewModel.deleteLocationFromFavourite(it) }
+        favouriteLocationAdapter.notifyDataSetChanged()
     }
 
 
