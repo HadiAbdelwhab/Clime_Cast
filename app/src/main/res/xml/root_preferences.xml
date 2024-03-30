@@ -38,7 +38,10 @@
 
         <SwitchPreferenceCompat
             app:key="mode"
-            app:title="@string/dark_mode_title" />
+            app:title="@string/dark_mode_title"
+            app:summaryOn="@string/dark_mode_enabled"
+            app:summaryOff="@string/dark_mode_disabled"
+            app:defaultValue="false" />
 
         <SwitchPreferenceCompat
             app:key="notification"

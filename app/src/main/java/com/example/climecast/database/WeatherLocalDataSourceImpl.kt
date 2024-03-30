@@ -27,10 +27,10 @@ class WeatherLocalDataSourceImpl(context: Context) : WeatherLocalDataSource {
         @Volatile
         private var instance: WeatherLocalDataSourceImpl? = null
         fun getInstance(context: Context): WeatherLocalDataSourceImpl {
-            return WeatherLocalDataSourceImpl.instance ?: synchronized(this) {
-                WeatherLocalDataSourceImpl.instance
+            return instance ?: synchronized(this) {
+                instance
                     ?: WeatherLocalDataSourceImpl(context).also {
-                        WeatherLocalDataSourceImpl.instance = it
+                        instance = it
                     }
             }
         }

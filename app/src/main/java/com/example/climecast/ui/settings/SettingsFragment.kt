@@ -10,6 +10,7 @@ import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
+import androidx.preference.SwitchPreferenceCompat
 import com.example.climecast.R
 import com.example.climecast.ui.MainActivity
 import java.util.*
@@ -21,13 +22,20 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
 
         val languagePreference: ListPreference? = findPreference("language")
         languagePreference?.setOnPreferenceChangeListener { _, newValue ->
-            // Update app's locale when language preference changes
             val languageCode = newValue as String
             setAppLocale(requireContext(), languageCode)
 
-            // Restart MainActivity to apply language changes
             val intent = Intent(context, MainActivity::class.java)
             startActivity(intent)
+
+            true
+        }
+
+        val switchPreference = findPreference<SwitchPreferenceCompat>("mode")
+        switchPreference?.setOnPreferenceChangeListener { _, newValue ->
+            val isEnabled = newValue as Boolean
+            // Do something with the new value
+            //activity.setTheme(R.s)
 
             true
         }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ClimeCast</string>
+    <string name="app_name">Clime Cast</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="home_text_view">Home</string>
@@ -47,4 +47,6 @@
     <string name="channel_name">channel_alert</string>
     <string name="order_confirmation">Are you sure you want to delete this city?</string>
     <string name="ok">Yes</string>
+    <string name="dark_mode_enabled">enable_dark_mode</string>
+    <string name="dark_mode_disabled">disable_dark_mode</string>
 </resources>
