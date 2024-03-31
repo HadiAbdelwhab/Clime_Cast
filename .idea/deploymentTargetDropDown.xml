@@ -8,18 +8,6 @@
       <entry key="app">
         <State />
       </entry>
-      <entry key="deleteAlertByTimestamp()">
-        <State />
-      </entry>
-      <entry key="deleteLocation()">
-        <State />
-      </entry>
-      <entry key="deleteWeatherData()">
-        <State />
-      </entry>
-      <entry key="getFavouriteLocations()">
-        <State />
-      </entry>
     </value>
   </component>
 </project>

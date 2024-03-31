@@ -1,5 +1,6 @@
 package com.example.climecast.database
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -18,6 +19,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -27,8 +29,8 @@ import org.junit.runner.RunWith
 class WeatherLocalDataSourceTest {
 
 
-    /*@get:Rule
-    var instantExecutorRule = InstantTaskExecutorRule()*/
+    @get:Rule
+    var instantExecutorRule = InstantTaskExecutorRule()
 
     private lateinit var database: WeatherDatabase
     private lateinit var weatherDataDao: WeatherDataDao
@@ -57,10 +59,10 @@ class WeatherLocalDataSourceTest {
 
 
     @Test
-    fun addLocation() = runTest {
+    fun addLocation() = runBlocking {
         val location = Location("City",1.0,1.0)
         localDataSource.addLocation(location)
-        delay(10000) // Adjust the delay time as needed
+
 
         val result = locationsDao.getFavouriteLocations().firstOrNull()
         assertEquals(location, result?.first())

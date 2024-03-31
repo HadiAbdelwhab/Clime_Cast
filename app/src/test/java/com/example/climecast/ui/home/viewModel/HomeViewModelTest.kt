@@ -2,9 +2,8 @@ package com.example.climecast.ui.home.viewModel
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.climecast.model.WeatherData
-import com.example.climecast.model.WeatherResponse
 import com.example.climecast.network.ApiState
-import com.example.climecast.repository.FakeWeatherRepository
+import com.example.climecast.FakeWeatherRepository
 import com.example.climecast.repository.WeatherRepository
 import com.example.climecast.ui.home.viewmodel.HomeViewModel
 import kotlinx.coroutines.Dispatchers
@@ -17,7 +16,6 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
-import org.hamcrest.MatcherAssert.assertThat
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before

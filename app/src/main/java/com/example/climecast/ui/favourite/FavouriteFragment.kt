@@ -98,11 +98,7 @@ class FavouriteFragment : Fragment(), FavouriteClickListener,
 
 
     override fun onShowDetails(location: Location) {
-        val action = FavouriteFragmentDirections.actionFavouriteFragmentToHomeFragment(
-            location.latitude.toString(),
-            location.longitude.toString()
-        )
-        findNavController().navigate(action)
+
 
     }
     override fun onDeleteClick(location: Location) {
