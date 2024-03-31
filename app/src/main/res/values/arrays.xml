@@ -1,0 +1,42 @@
+<resources>
+    <string-array name="language_entries">
+        <item>English</item>
+        <item>العربية</item>
+    </string-array>
+
+    <string-array name="language_values">
+        <item>en</item>
+        <item>ar</item>
+    </string-array>
+    <string-array name="units_entries">
+        <item>celsius</item>
+        <item>Kelvin</item>
+        <item>Fahrenheit</item>
+    </string-array>
+
+    <string-array name="units_values">
+        <item>celsius</item>
+        <item>Kelvin</item>
+        <item>Fahrenheit</item>
+    </string-array>
+
+
+    <string-array name="wind_entries">
+        <item>meter/second</item>
+        <item>miles/hour</item>
+    </string-array>
+
+    <string-array name="wind_values">
+        <item>meter/second</item>
+        <item>miles/hour</item>
+    </string-array>
+
+    <string-array name="location_entries">
+        <item>GPS</item>
+        <item>Map</item>
+    </string-array>
+    <string-array name="location_values">
+        <item>GPS</item>
+        <item>Map</item>
+    </string-array>
+</resources>

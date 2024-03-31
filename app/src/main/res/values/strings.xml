@@ -1,3 +1,53 @@
 <resources>
-    <string name="app_name">ClimeCast</string>
+    <string name="app_name">Clime Cast</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="home_text_view">Home</string>
+    <string name="alert_text_view">Alert</string>
+    <string name="settings_text_view">Settings</string>
+    <string name="favourite_text_view">Favourite</string>
+    <string name="degree_text_view">Degree</string>
+    <string name="celsius_text">Celsius</string>
+    <string name="kelvin_text_view">Kelvin</string>
+    <string name="wind_text_view">Wind</string>
+    <string name="miles_hour_text">miles/hour</string>
+    <string name="meter_sec_text">meter/sec</string>
+    <string name="language_text_view">Language</string>
+    <string name="english_text">English</string>
+    <string name="arabic_text">Arabic</string>
+    <string name="dark_mode_text_view">Dark Mode\n</string>
+    <string name="location_text_view">Location\n</string>
+    <string name="gps_text">GPS</string>
+    <string name="map_text">Map</string>
+    <string name="choose_a_loaction_button">Choose a loaction</string>
+    <string name="min_text_view">Min</string>
+    <string name="max_text_view">Max</string>
+    <!-- Preference Titles -->
+    <string name="app_header">App</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="language_title">Choose language</string>
+    <string name="units_title">Choose unit</string>
+    <!-- Sync Preferences -->
+    <string name="dark_mode_title">Dark mode</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="weather_header">Weather</string>
+    <string name="wind_title">Wind unit</string>
+    <string name="temp_unit_title">Temperature unit</string>
+    <string name="location_title">Location</string>
+    <string name="notification_title">Notifications</string>
+    <string name="start_time">Start time</string>
+    <string name="end_time">End time</string>
+    <string name="alert_time">Alert time\n</string>
+    <string name="channel_description">alert channel</string>
+    <string name="channel_name">channel_alert</string>
+    <string name="order_confirmation">Are you sure you want to delete this city?</string>
+    <string name="ok">Yes</string>
+    <string name="dark_mode_enabled">enable_dark_mode</string>
+    <string name="dark_mode_disabled">disable_dark_mode</string>
+    <string name="choose_a_from_map_button">Choose a From Map</string>
 </resources>
