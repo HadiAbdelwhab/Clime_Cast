@@ -1,20 +1,13 @@
 package com.example.climecast.ui
 
 
-import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
-import androidx.navigation.Navigation.findNavController
-import androidx.navigation.ui.NavigationUI.setupWithNavController
+import androidx.navigation.Navigation
+import androidx.navigation.ui.NavigationUI
 import com.example.climecast.R
-import com.example.climecast.ui.alerts.notification.NotificationIntentService
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import java.util.jar.Manifest
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,18 +18,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        bottomNavigationView = findViewById(R.id.bottom_navigation)
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment)
 
-        bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-
-
-        navController = findNavController(this, R.id.nav_host_fragment)
-        setupWithNavController(bottomNavigationView, navController)
-
-
-
-
+        NavigationUI.setupWithNavController(bottomNavigationView, navController)
     }
 
 
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp() || super.onSupportNavigateUp()
+    }
 }

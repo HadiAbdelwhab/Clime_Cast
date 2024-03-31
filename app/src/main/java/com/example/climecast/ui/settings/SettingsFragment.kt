@@ -15,7 +15,8 @@ import com.example.climecast.R
 import com.example.climecast.ui.MainActivity
 import java.util.*
 
-class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener {
+class SettingsFragment : PreferenceFragmentCompat(),
+    SharedPreferences.OnSharedPreferenceChangeListener {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey)
@@ -34,8 +35,17 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
         val switchPreference = findPreference<SwitchPreferenceCompat>("mode")
         switchPreference?.setOnPreferenceChangeListener { _, newValue ->
             val isEnabled = newValue as Boolean
-            // Do something with the new value
             //activity.setTheme(R.s)
+
+            true
+        }
+
+
+        val switchPreferenceNotification = findPreference<SwitchPreferenceCompat>("notification")
+        switchPreferenceNotification?.setOnPreferenceChangeListener { _, newValue ->
+            val isEnabled = newValue as Boolean
+            PreferenceManager.getDefaultSharedPreferences(requireActivity()).edit()
+                .putBoolean("notification", isEnabled).apply()
 
             true
         }
@@ -51,7 +61,10 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
         preferenceManager.sharedPreferences?.unregisterOnSharedPreferenceChangeListener(this)
     }
 
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+    override fun onSharedPreferenceChanged(
+        sharedPreferences: SharedPreferences?,
+        key: String?
+    ) {
     }
 
     private fun setAppLocale(context: Context, languageCode: String) {

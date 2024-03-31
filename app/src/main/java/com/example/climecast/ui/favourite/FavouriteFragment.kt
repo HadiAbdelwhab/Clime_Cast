@@ -79,7 +79,7 @@ class FavouriteFragment : Fragment(), FavouriteClickListener,
 
     private fun setListeners() {
         binding.addNewLoactionButton.setOnClickListener {
-            val action = FavouriteFragmentDirections.actionFavouriteFragmentToMapsFragment()
+            val action = FavouriteFragmentDirections.actionFavouriteFragmentToMapsFragment("fav")
             findNavController().navigate(action)
         }
     }
@@ -96,18 +96,23 @@ class FavouriteFragment : Fragment(), FavouriteClickListener,
     }
 
 
-
     override fun onShowDetails(location: Location) {
 
-
+        val action = FavouriteFragmentDirections.actionFavouriteFragmentToFavouritDetailsFragment(
+            location.longitude.toString(),
+            location.longitude.toString()
+        )
+        findNavController().navigate(action)
     }
+
     override fun onDeleteClick(location: Location) {
         deletedLocation = location
-        val alertFragmentDialog=FavouriteDialogFragment()
+        val alertFragmentDialog = FavouriteDialogFragment()
         alertFragmentDialog.setAlertDialogListener(this)
-        alertFragmentDialog.show(parentFragmentManager,"alertFragmentDialog")
+        alertFragmentDialog.show(parentFragmentManager, "alertFragmentDialog")
 
     }
+
     override fun onPositiveButtonClick() {
         deletedLocation?.let { viewModel.deleteLocationFromFavourite(it) }
         favouriteLocationAdapter.notifyDataSetChanged()

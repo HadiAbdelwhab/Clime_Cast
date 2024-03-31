@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -47,7 +48,7 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun `test addWeatherData`() = runBlocking {
+    fun `test addWeatherData`() = runTest {
         val weatherData = WeatherData("data data data data")
         viewModel.addWeatherData(weatherData)
         val result = repository.getWeatherData().first()

@@ -34,6 +34,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapClickListene
     private lateinit var factory: MapViewModelFactory
 
     private var googleMap: GoogleMap? = null
+    private lateinit var sourceFragment: String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,22 +54,25 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapClickListene
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
+
+
+        val args = MapsFragmentArgs.fromBundle(requireArguments())
+        sourceFragment = args.sourceFragment
         setUpViewModel()
         setListeners()
     }
 
     override fun onMapReady(gMap: GoogleMap) {
         googleMap = gMap
-        val sydney = LatLng(-34.0, 151.0)
-        gMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        gMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        googleMap?.clear()
+        val defaultLocation = LatLng(0.0, 0.0)
+        gMap.moveCamera(CameraUpdateFactory.newLatLng(defaultLocation))
         gMap.setOnMapClickListener(this)
     }
 
     override fun onMapClick(latLng: LatLng) {
-        // Handle map click event
-        googleMap?.clear() // Clear existing markers
-        googleMap?.addMarker(MarkerOptions().position(latLng)) // Add a new marker
+        googleMap?.clear()
+        googleMap?.addMarker(MarkerOptions().position(latLng))
     }
 
     private fun setUpViewModel() {
@@ -97,8 +101,15 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapClickListene
                             city = chosenCity
                         )
                     )
-                    val action = MapsFragmentDirections.actionMapsFragmentToFavouriteFragment()
-                    findNavController().navigate(action)
+                    if (sourceFragment.equals("fav")) {
+                        val action = MapsFragmentDirections.actionMapsFragmentToFavouriteFragment()
+                        findNavController().navigate(action)
+                    }else{
+                        val action=MapsFragmentDirections.actionMapsFragmentToHomeFragment(location.latitude.toString(),
+                            location.longitude.toString())
+                        findNavController().navigate(action)
+                    }
+
                 }
             }
         }
@@ -116,14 +127,11 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapClickListene
     }
 
     private fun getCityFromLocation(latitude: Double, longitude: Double): String {
-        val geocoder = Geocoder(requireActivity())
-        val addresses: MutableList<Address>? = geocoder.getFromLocation(latitude, longitude, 1)
-        var cityText = "City not found"
-        if (!addresses.isNullOrEmpty()) {
-            val address = addresses[0]
-            cityText = address.locality ?: address.subAdminArea ?: address.adminArea ?: cityText
-        }
-        return cityText
+        val geocoder = Geocoder(requireContext())
+        val addresses: List<Address>? = geocoder.getFromLocation(latitude, longitude, 1)
+        val cityName = addresses?.get(0)?.adminArea
+        val countryName = addresses?.get(0)?.countryName
+        return "$cityName $countryName"
     }
 }
 

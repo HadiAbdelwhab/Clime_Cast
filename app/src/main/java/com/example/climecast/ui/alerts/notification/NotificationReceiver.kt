@@ -16,6 +16,7 @@ import com.example.climecast.util.Constants.DESCRIPTION_KEY
 import com.example.climecast.util.Constants.ICON_KEY
 import com.example.climecast.util.Constants.TEMP_KEY
 import com.example.climecast.util.Constants.TIME_STAMP_KEY
+import com.example.climecast.util.SharedPreferencesManger
 import com.example.climecast.util.WeatherUtils.Companion.kelvinToCelsius
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -43,6 +44,10 @@ class NotificationReceiver : BroadcastReceiver() {
                 repository.deleteAlertByTimestamp(timestamp)
             }
 
+            val isNotificationEnabled =
+                SharedPreferencesManger.getSharedPreferencesManagerNotification(context)
+
+
             val notificationManager =
                 ctx.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -52,7 +57,8 @@ class NotificationReceiver : BroadcastReceiver() {
                 .setContentText("Weather: $description \n $temperature")
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
 
-            notificationManager.notify(System.currentTimeMillis().toInt(), builder.build())
+            if (isNotificationEnabled)
+                notificationManager.notify(System.currentTimeMillis().toInt(), builder.build())
         }
     }
 
@@ -70,6 +76,3 @@ class NotificationReceiver : BroadcastReceiver() {
         }
     }
 }
-/*Glide.with()
-.load("https://openweathermap.org/img/wn/${data.current.weather[0].icon}@2x.png")
-.into(binding.currentWeatherImageView)*/

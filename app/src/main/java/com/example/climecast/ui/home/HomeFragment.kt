@@ -24,6 +24,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -37,6 +38,7 @@ import com.example.climecast.model.WeatherResponse
 import com.example.climecast.repository.WeatherRepositoryImpl
 import com.example.climecast.network.ApiState
 import com.example.climecast.network.WeatherRemoteDataSourceImpl
+import com.example.climecast.ui.favourite.FavouriteFragmentDirections
 import com.example.climecast.ui.home.adapters.DaysWeatherDataAdapter
 import com.example.climecast.ui.home.adapters.HoursWeatherDataAdapter
 import com.example.climecast.ui.home.viewmodel.HomeViewModel
@@ -95,9 +97,8 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-
         setupViewModel()
-
+        setListeners()
         if (isInternetAvailable(requireActivity())) {
             setupLocation()
             setupObservers()
@@ -112,6 +113,13 @@ class HomeFragment : Fragment() {
         }
 
 
+    }
+
+    private fun setListeners() {
+        binding.openMapButton.setOnClickListener {
+            val action = HomeFragmentDirections.actionHomeFragmentToMapsFragment("home")
+            findNavController().navigate(action)
+        }
     }
 
     private fun setupLocalObservers() {
@@ -201,6 +209,9 @@ class HomeFragment : Fragment() {
             else -> data.current.temperature.toString()
         }
 
+        binding.currentDataAndTimeTextView.text =
+            convertUnixTimestampToFormattedDate(data.current.timestamp)
+
         binding.currentWeatherDescriptionTextView.text = data.current.weather[0].description
         binding.windTextView.text = when (windUnit) {
             "meter/second" -> "${data.current.windSpeed} m/s"
@@ -276,10 +287,12 @@ class HomeFragment : Fragment() {
             object : LocationCallback() {
                 override fun onLocationResult(p0: LocationResult) {
                     super.onLocationResult(p0)
+
+
                     val location = p0.lastLocation
-                        latitude = location!!.latitude
-                        longitude = location!!.longitude
- 
+                    latitude = location!!.latitude
+                    longitude = location!!.longitude
+
 
                     val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
                     with(sharedPref.edit()) {

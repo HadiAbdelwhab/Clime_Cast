@@ -23,6 +23,13 @@
             android:name="longitude"
             app:argType="string"
             app:nullable="true" />
+        <action
+            android:id="@+id/action_homeFragment_to_mapsFragment"
+            app:destination="@id/mapsFragment">
+            <argument
+                android:name="sourceFragment"
+                app:argType="string" />
+        </action>
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -36,7 +43,14 @@
         tools:layout="@layout/fragment_favourite">
         <action
             android:id="@+id/action_favouriteFragment_to_mapsFragment"
-            app:destination="@id/mapsFragment" />
+            app:destination="@id/mapsFragment">
+            <argument
+                android:name="sourceFragment"
+                app:argType="string" />
+        </action>
+        <action
+            android:id="@+id/action_favouriteFragment_to_favouritDetailsFragment"
+            app:destination="@id/favouritDetailsFragment" />
     </fragment>
 
 
@@ -48,6 +62,24 @@
         <action
             android:id="@+id/action_mapsFragment_to_favouriteFragment"
             app:destination="@id/favouriteFragment" />
+        <action
+            android:id="@+id/action_mapsFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <argument
+            android:name="sourceFragment"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/favouritDetailsFragment"
+        android:name="com.example.climecast.ui.favourite.FavouriteDetailsFragment"
+        android:label="fragment_favourit_details"
+        tools:layout="@layout/fragment_favourit_details" >
+        <argument
+            android:name="longitude"
+            app:argType="string" />
+        <argument
+            android:name="latitude"
+            app:argType="string" />
     </fragment>
 
 
